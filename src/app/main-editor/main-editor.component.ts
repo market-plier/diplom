@@ -1,7 +1,9 @@
+import { EventEmitter, Input, Output } from '@angular/core';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import jsPDF from 'jspdf';
 import { timesNewRoman } from 'src/assets/Times_New_Roman_Regular';
+import { TemplateData } from '../api/contracts/templateData';
 import {
   agendaData,
   decisionData,
@@ -17,35 +19,8 @@ import {
 })
 export class MainEditorComponent {
   people = people;
-  form: FormGroup;
-  get headerContent() {
-    return this.form.get('header')?.value;
-  }
-
-  get protocolContent() {
-    return this.form.get('protocol')?.value;
-  }
-
-  get peopleContent() {
-    return this.form.get('people')?.value?.join('; ');
-  }
-
-  get agendaContent() {
-    return this.form.get('agenda')?.value;
-  }
-
-  get decisionContent() {
-    return this.form.get('decision')?.value;
-  }
-
-  get secretarContent() {
-    return this.form.get('secretar')?.value;
-  }
-
-  get rectorContent() {
-    return this.form.get('rector')?.value;
-  }
-  @ViewChild('document') document!: ElementRef;
+  @Input() form: FormGroup;
+  @Output() preview = new EventEmitter<TemplateData>();
   constructor() {
     // Create sample projects
 
@@ -63,22 +38,8 @@ export class MainEditorComponent {
       .get('people')
       ?.valueChanges.subscribe((value) => console.log(this.form.getRawValue()));
   }
-  public downloadAsPDF() {
-    var doc = new jsPDF();
-    doc.addFileToVFS('TimesNewRomen.ttf', timesNewRoman);
-    doc.addFont('TimesNewRomen.ttf', 'Times New Roman', 'normal');
-    doc.setFont('Times New Roman', 'normal');
-    var elementHTML = this.document.nativeElement;
 
-    doc.html(elementHTML, {
-      callback: function (doc) {
-        // Save the PDF
-        doc.save('sample-document.pdf');
-      },
-      x: 15,
-      y: 15,
-      width: 170, //target width in the PDF document
-      windowWidth: 650, //window width in CSS pixels
-    });
+  onPreviewClick() {
+    this.preview.emit(this.form.getRawValue());
   }
 }

@@ -13,8 +13,14 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PreviewComponent } from './preview/preview.component';
 @NgModule({
-  declarations: [AppComponent, MainEditorComponent, SelectAllComponent],
+  declarations: [
+    AppComponent,
+    MainEditorComponent,
+    SelectAllComponent,
+    PreviewComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,

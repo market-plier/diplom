@@ -1,2 +1,3 @@
-<app-main-editor></app-main-editor>
+<app-main-editor (preview)="onPreview($event)"></app-main-editor>
+<app-preview [template]="templateData"></app-preview>
 <router-outlet></router-outlet>
