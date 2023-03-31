@@ -1,4 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
+@use "@angular/material" as mat;
+* {
+  font-family: "Times New Roman", Times, serif !important;
+}
+html,
+body {
+  height: 100%;
+  background: rgb(204, 204, 204);
+}
+body {
+  margin: 0;
+  font-family: "Times New Roman", Times, serif;
+}
+textarea {
+  font-family: "Times New Roman", Times, serif;
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+$my-custom-level: mat.define-typography-level(
+  $font-family: serif,
+  $font-weight: 400,
+  $font-size: 1rem,
+  $line-height: 1,
+  $letter-spacing: normal,
+);

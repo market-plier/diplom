@@ -1,0 +1,131 @@
+<form [formGroup]="form" class="form">
+  <mat-form-field class="header">
+    <mat-label>Заголовок</mat-label>
+    <textarea
+      formControlName="header"
+      cdkTextareaAutosize
+      #autosize="cdkTextareaAutosize"
+      cdkAutosizeMinRows="1"
+      cdkAutosizeMaxRows="5"
+      matInput
+    ></textarea>
+  </mat-form-field>
+
+  <img src="assets/logo.png" class="logo" alt="" />
+
+  <mat-form-field class="protocol">
+    <mat-label>Протокол</mat-label>
+    <textarea
+      formControlName="protocol"
+      cdkTextareaAutosize
+      matInput
+      #autosize="cdkTextareaAutosize"
+      cdkAutosizeMinRows="1"
+      cdkAutosizeMaxRows="5"
+    ></textarea>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Присутні:</mat-label>
+    <mat-select formControlName="people" multiple>
+      <app-select-all [model]="$any(form).controls['people']" [values]="people">
+      </app-select-all>
+      <mat-option *ngFor="let person of people" [value]="person">{{
+        person
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="agenda">
+    <mat-label>Порядок денний</mat-label>
+    <textarea
+      formControlName="agenda"
+      cdkTextareaAutosize
+      matInput
+      #autosize="cdkTextareaAutosize"
+      cdkAutosizeMinRows="1"
+      cdkAutosizeMaxRows="12"
+    >
+    </textarea>
+  </mat-form-field>
+
+  <mat-form-field class="decision">
+    <mat-label>Вирішили:</mat-label>
+    <textarea
+      formControlName="decision"
+      cdkTextareaAutosize
+      matInput
+      #autosize="cdkTextareaAutosize"
+      cdkAutosizeMinRows="1"
+      cdkAutosizeMaxRows="12  "
+    ></textarea>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Ректор</mat-label>
+    <mat-select formControlName="rector">
+      <mat-option *ngFor="let person of people" [value]="person">{{
+        person
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Відповідальний секретар ПК</mat-label>
+    <mat-select formControlName="secretar">
+      <mat-option *ngFor="let person of people" [value]="person">{{
+        person
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button (click)="downloadAsPDF()" mat-raised-button color="primary">
+    Згенерувати PDF
+  </button>
+</form>
+
+<div
+  style="display: flex; flex-direction: column; align-items: center"
+  #document
+>
+  <div
+    style="
+      text-align: center;
+      font-size: 16px;
+      font-weight: bold;
+      white-space: pre-wrap;
+    "
+  >
+    {{ headerContent }}
+  </div>
+  <img height="77" width="64" src="assets/logo.png" class="logo" alt="" />
+  <div
+    style="
+      text-align: center;
+      font-size: 16px;
+      font-weight: 700;
+      white-space: pre-wrap;
+    "
+  >
+    {{ protocolContent }}
+  </div>
+  <div
+    style="
+      text-align: left;
+      font-size: 14px;
+      font-weight: 400;
+      white-space: pre-wrap;
+    "
+  >
+    {{ peopleContent }}
+  </div>
+  <div
+    style="
+      text-align: left;
+      font-size: 14px;
+      font-weight: 400;
+      white-space: pre-wrap;
+    "
+  >
+    {{ agendaContent }}
+  </div>
+</div>
