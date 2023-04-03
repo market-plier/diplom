@@ -1,54 +1,96 @@
-<div
-  style="
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-family: 'Times New Roman', Times, serif;
-  "
-  #document
->
-  <div
-    style="
-      text-align: center;
-      font-size: 16px;
-      font-weight: bold;
-      white-space: pre-wrap;
-    "
+<div class="buttons">
+  <a mat-raised-button routerLink="/editor" class=""
+    >Повернутися до заповнення</a
   >
-    {{ template.header }}
-  </div>
-  <img height="77" width="64" [src]="logo" class="logo" alt="" />
-  <div
-    style="
-      text-align: center;
-      font-size: 16px;
-      font-weight: bold;
-      white-space: pre-wrap;
-    "
+  <button
+    (click)="onGenerateClick()"
+    class="generate-pdf"
+    mat-raised-button
+    color="primary"
   >
-    {{ template.protocol }}
-  </div>
+    Згенерувати PDF
+  </button>
+</div>
+<div class="container">
   <div
-    style="
-      text-align: left;
-      font-size: 14px;
-      font-weight: 400;
-      white-space: pre-wrap;
-    "
+    style="font-family: 'Times New Roman', Times, serif; white-space: pre-wrap"
+    #document
   >
-    {{ template.people?.join("; ") }}
-  </div>
-  <div
-    style="
-      text-align: left;
-      font-size: 14px;
-      font-weight: 400;
-      white-space: pre-wrap;
-    "
-  >
-    {{ template.agenda }}
+    <div class="header" style="margin-left: -40px">
+      <div
+        style="
+          text-align: center;
+          font-size: 16px;
+          font-weight: bold;
+          white-space: pre-wrap;
+        "
+      >
+        {{ dataService.templateData.header }}
+      </div>
+      <img
+        height="77"
+        width="64"
+        [src]="logo"
+        style="margin: auto; display: block"
+        alt="logo"
+      />
+      <div
+        style="
+          text-align: center;
+          font-size: 16px;
+          font-weight: bold;
+          white-space: pre-wrap;
+        "
+      >
+        {{ dataService.templateData.protocol }}
+      </div>
+    </div>
+    <br />
+    <div
+      *ngIf="dataService.templateData.people?.length"
+      style="font-size: 16px"
+    >
+      <div style="font-weight: bold">Присутні</div>
+      <br />
+      <div style="font-weight: normal">
+        <span>{{ dataService.templateData.people?.join("; ")?.trim() }}</span>
+      </div>
+    </div>
+    <br />
+    <div style="font-weight: bold">Порядок денний:</div>
+    <br />
+    <div
+      style="display: flex; margin-left: 43px; gap: 7px; margin-top: 3px"
+      *ngFor="let item of dataService.templateData.agenda; let i = index"
+    >
+      <div>{{ i + 1 }}.</div>
+      <div>{{ item }}</div>
+    </div>
+    <br />
+    <div style="font-weight: bold">Вирішили:</div>
+    <br />
+    <div
+      style="display: flex; margin-left: 43px; gap: 7px; margin-top: 3px"
+      *ngFor="let item of dataService.templateData.decision; let i = index"
+    >
+      <div>{{ i + 1 }}.</div>
+      <div>{{ item }}</div>
+    </div>
+    <br />
+    <div
+      style="margin-left: 63px; display: flex; justify-content: space-between"
+    >
+      <div>Ректор</div>
+      <div style="min-width: 170px">{{ dataService.templateData.rector }}</div>
+    </div>
+    <br />
+    <div
+      style="margin-left: 63px; display: flex; justify-content: space-between"
+    >
+      <div>Відповідальний секретар ПК</div>
+      <div style="min-width: 170px">
+        <span>{{ dataService.templateData.secretar }}</span>
+      </div>
+    </div>
   </div>
 </div>
-<button (click)="onGenerateClick()" mat-raised-button color="primary">
-  Згенерувати PDF
-</button>

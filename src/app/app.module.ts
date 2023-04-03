@@ -11,9 +11,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { SelectAllComponent } from './select-all/select-all.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
-
+import { MatIconModule } from '@angular/material/icon';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PreviewComponent } from './preview/preview.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
+
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,6 +37,9 @@ import { PreviewComponent } from './preview/preview.component';
     FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
+    MatToolbarModule,
+    MatTooltipModule,
+    MatIconModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

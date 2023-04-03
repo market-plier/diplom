@@ -9,7 +9,7 @@ import { timesNewRomanBold } from 'src/assets/Times_New_Roman_Regular_Bold';
 export class PdfGeneratorService {
   constructor() {}
   public downloadAsPDF(document: ElementRef) {
-    var doc = new jsPDF();
+    var doc = new jsPDF({ unit: 'mm' });
     doc.addFileToVFS('TimesNewRoman.ttf', timesNewRoman);
     doc.addFileToVFS('TimesNewRomanBold.ttf', timesNewRomanBold);
     doc.addFont('TimesNewRoman.ttf', 'Times New Roman', 'normal');
@@ -21,10 +21,10 @@ export class PdfGeneratorService {
         // Save the PDF
         doc.save('protocol.pdf');
       },
-      x: 15,
-      y: 15,
-      width: 170, //target width in the PDF document
-      windowWidth: 650, //window width in CSS pixels
+      autoPaging: 'text',
+      margin: [10, 15, 25, 25],
+      width: 180, //target width in the PDF document
+      windowWidth: 700, //window width in CSS pixels
     });
   }
 }

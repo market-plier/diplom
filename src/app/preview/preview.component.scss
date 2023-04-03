@@ -1,14 +1,39 @@
-:host {
+.container {
   margin-top: 20px;
-  padding: 20px;
-  padding-left: 40px;
-  padding-right: 40px;
+  padding: 1cm;
+  padding-left: 2.5cm;
   width: 21cm;
-  height: 29.7cm;
   background: white;
   display: block;
   margin: 0 auto;
   margin-bottom: 0.5cm;
   box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
   display: block;
+
+  .points {
+    display: flex;
+  }
+}
+.back {
+  left: 15px;
+  top: 15px;
+
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  background-color: green;
+  border: 2px solid #4caf50;
+}
+.generate-pdf {
+  position: -webkit-sticky; /* Safari */
+
+  position: sticky;
+  right: 15px;
+  top: 15px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  position: sticky;
+  top: 15px;
 }

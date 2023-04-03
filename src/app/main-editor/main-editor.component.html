@@ -35,32 +35,75 @@
       }}</mat-option>
     </mat-select>
   </mat-form-field>
-
-  <mat-form-field class="agenda">
-    <mat-label>Порядок денний</mat-label>
-    <textarea
-      formControlName="agenda"
-      cdkTextareaAutosize
-      matInput
-      #autosize="cdkTextareaAutosize"
-      cdkAutosizeMinRows="1"
-      cdkAutosizeMaxRows="12"
+  <p>Порядок денний:</p>
+  <ng-container formArrayName="agenda">
+    <ng-container
+      *ngFor="let agendaForm of agendaPoints.controls; let i = index"
     >
-    </textarea>
-  </mat-form-field>
+      <div class="point">
+        <span class="counter">{{ i + 1 }}.</span>
 
-  <mat-form-field class="decision">
-    <mat-label>Вирішили:</mat-label>
-    <textarea
-      formControlName="decision"
-      cdkTextareaAutosize
-      matInput
-      #autosize="cdkTextareaAutosize"
-      cdkAutosizeMinRows="1"
-      cdkAutosizeMaxRows="12  "
-    ></textarea>
-  </mat-form-field>
+        <mat-form-field class="agenda">
+          <mat-label>Порядок денний</mat-label>
+          <textarea
+            [formControl]="$any(agendaForm)"
+            cdkTextareaAutosize
+            matInput
+            #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="1"
+            cdkAutosizeMaxRows="12"
+          >
+          </textarea>
+          <button
+            mat-icon-button
+            matSuffix
+            [disabled]="agendaPoints.length === 1"
+            (click)="deleteAgendaPoint(i)"
+          >
+            <mat-icon>delete_forever</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+    </ng-container>
+  </ng-container>
+  <button mat-raised-button color="secondary" (click)="addAgendaPoint()">
+    Додати пункт
+  </button>
+  <br />
+  <p>Вирішили:</p>
+  <ng-container formArrayName="decision">
+    <ng-container
+      *ngFor="let decisionForm of decisionPoints.controls; let i = index"
+    >
+      <div class="point">
+        <span class="counter">{{ i + 1 }}.</span>
 
+        <mat-form-field class="decision">
+          <mat-label>Вирішили:</mat-label>
+          <textarea
+            [formControl]="$any(decisionForm)"
+            cdkTextareaAutosize
+            matInput
+            #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="1"
+            cdkAutosizeMaxRows="12"
+          ></textarea>
+          <button
+            mat-icon-button
+            [disabled]="decisionPoints.length === 1"
+            matSuffix
+            (click)="deleteDecisionPoint(i)"
+          >
+            <mat-icon>delete_forever</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+    </ng-container>
+  </ng-container>
+  <button mat-raised-button color="secondary" (click)="addDecisionPoint()">
+    Додати пункт
+  </button>
+  <br />
   <mat-form-field appearance="fill">
     <mat-label>Ректор</mat-label>
     <mat-select formControlName="rector">
@@ -77,8 +120,17 @@
       }}</mat-option>
     </mat-select>
   </mat-form-field>
-
-  <button (click)="onPreviewClick()" mat-raised-button color="secondary">
+</form>
+<div
+  class="preview-btn"
+  matTooltip="Заповніть обов'язкові поля"
+  [matTooltipDisabled]="form.valid"
+>
+  <button
+    (click)="onPreviewClick()"
+    [disabled]="form.invalid"
+    mat-raised-button
+  >
     Превью
   </button>
-</form>
+</div>

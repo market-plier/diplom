@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { TemplateData } from './api/contracts/templateData';
 
 @Component({
   selector: 'app-root',
@@ -7,11 +6,5 @@ import { TemplateData } from './api/contracts/templateData';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  templateData: TemplateData = {};
-
   title = 'diplom';
-
-  onPreview(data: TemplateData) {
-    this.templateData = data;
-  }
 }
