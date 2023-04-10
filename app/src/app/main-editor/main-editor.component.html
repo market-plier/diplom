@@ -24,7 +24,9 @@
       cdkAutosizeMaxRows="5"
     ></textarea>
   </mat-form-field>
-
+  <button (click)="openDialog()" style="margin-bottom: 8px" mat-raised-button>
+    Редагувати Присутніх
+  </button>
   <mat-form-field appearance="fill">
     <mat-label>Присутні:</mat-label>
     <mat-select formControlName="people" multiple>
@@ -40,30 +42,71 @@
     <ng-container
       *ngFor="let agendaForm of agendaPoints.controls; let i = index"
     >
-      <div class="point">
+      <div [formGroup]="$any(agendaForm)" class="point">
         <span class="counter">{{ i + 1 }}.</span>
-
-        <mat-form-field class="agenda">
-          <mat-label>Порядок денний</mat-label>
-          <textarea
-            [formControl]="$any(agendaForm)"
-            cdkTextareaAutosize
-            matInput
-            #autosize="cdkTextareaAutosize"
-            cdkAutosizeMinRows="1"
-            cdkAutosizeMaxRows="12"
-          >
-          </textarea>
-          <button
-            mat-icon-button
-            matSuffix
-            [disabled]="agendaPoints.length === 1"
-            (click)="deleteAgendaPoint(i)"
-          >
-            <mat-icon>delete_forever</mat-icon>
-          </button>
+        <mat-form-field style="min-width: 300px" appearance="fill">
+          <mat-label>Подія</mat-label>
+          <mat-select formControlName="keyword">
+            <mat-option *ngFor="let keyword of keywords" [value]="keyword">{{
+              keyword
+            }}</mat-option>
+          </mat-select>
         </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Громадянство</mat-label>
+          <mat-select formControlName="nationality">
+            <mat-option
+              *ngFor="let nationality of nationalities"
+              [value]="nationality"
+              >{{ nationality }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Форма навчання</mat-label>
+          <mat-select formControlName="formOfEducation">
+            <mat-option
+              *ngFor="let formOfEducation of formsOfEducation"
+              [value]="formOfEducation"
+              >{{ formOfEducation }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>База вступу</mat-label>
+          <mat-select formControlName="entryBase">
+            <mat-option
+              *ngFor="let entryBase of entryBases"
+              [value]="entryBase"
+              >{{ entryBase }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Освітній ступінь</mat-label>
+          <mat-select formControlName="educationDegree">
+            <mat-option
+              *ngFor="let educationDegree of educationDegrees"
+              [value]="educationDegree"
+              >{{ educationDegree }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+
+        <button
+          mat-icon-button
+          matSuffix
+          [disabled]="agendaPoints.length === 1"
+          (click)="deleteAgendaPoint(i)"
+        >
+          <mat-icon>delete_forever</mat-icon>
+        </button>
       </div>
+      <mat-card class="agenda">
+        <mat-card-content>
+          <span>{{ getAgendaValue($any(agendaForm)) }}</span></mat-card-content
+        >
+      </mat-card>
     </ng-container>
   </ng-container>
   <button mat-raised-button color="secondary" (click)="addAgendaPoint()">
@@ -78,48 +121,93 @@
       <div class="point">
         <span class="counter">{{ i + 1 }}.</span>
 
-        <mat-form-field class="decision">
-          <mat-label>Вирішили:</mat-label>
-          <textarea
-            [formControl]="$any(decisionForm)"
-            cdkTextareaAutosize
-            matInput
-            #autosize="cdkTextareaAutosize"
-            cdkAutosizeMinRows="1"
-            cdkAutosizeMaxRows="12"
-          ></textarea>
-          <button
-            mat-icon-button
-            [disabled]="decisionPoints.length === 1"
-            matSuffix
-            (click)="deleteDecisionPoint(i)"
-          >
-            <mat-icon>delete_forever</mat-icon>
-          </button>
-        </mat-form-field>
+        <div [formGroup]="$any(decisionForm)" class="point">
+          <span class="counter">{{ i + 1 }}.</span>
+          <mat-form-field style="min-width: 300px" appearance="fill">
+            <mat-label>Подія</mat-label>
+            <mat-select formControlName="keyword">
+              <mat-option *ngFor="let keyword of keywords" [value]="keyword">{{
+                keyword
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Громадянство</mat-label>
+            <mat-select formControlName="nationality">
+              <mat-option
+                *ngFor="let nationality of nationalities"
+                [value]="nationality"
+                >{{ nationality }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Форма навчання</mat-label>
+            <mat-select formControlName="formOfEducation">
+              <mat-option
+                *ngFor="let formOfEducation of formsOfEducation"
+                [value]="formOfEducation"
+                >{{ formOfEducation }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>База вступу</mat-label>
+            <mat-select formControlName="entryBase">
+              <mat-option
+                *ngFor="let entryBase of entryBases"
+                [value]="entryBase"
+                >{{ entryBase }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Освітній ступінь</mat-label>
+            <mat-select formControlName="educationDegree">
+              <mat-option
+                *ngFor="let educationDegree of educationDegrees"
+                [value]="educationDegree"
+                >{{ educationDegree }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
       </div>
+      <mat-card class="agenda">
+        <mat-card-content>
+          <span>{{
+            getDecisionValue($any(decisionForm))
+          }}</span></mat-card-content
+        >
+      </mat-card>
     </ng-container>
   </ng-container>
-  <button mat-raised-button color="secondary" (click)="addDecisionPoint()">
-    Додати пункт
-  </button>
   <br />
-  <mat-form-field appearance="fill">
-    <mat-label>Ректор</mat-label>
-    <mat-select formControlName="rector">
-      <mat-option *ngFor="let person of people" [value]="person">{{
-        person
-      }}</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field appearance="fill">
-    <mat-label>Відповідальний секретар ПК</mat-label>
-    <mat-select formControlName="secretar">
-      <mat-option *ngFor="let person of people" [value]="person">{{
-        person
-      }}</mat-option>
-    </mat-select>
-  </mat-form-field>
+  <div
+    style="
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      width: 100%;
+    "
+  >
+    <mat-form-field style="width: auto" appearance="fill">
+      <mat-label>Ректор</mat-label>
+      <mat-select formControlName="rector">
+        <mat-option *ngFor="let person of people" [value]="person">{{
+          person
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field style="width: auto" appearance="fill">
+      <mat-label>Відповідальний секретар ПК</mat-label>
+      <mat-select formControlName="secretar">
+        <mat-option *ngFor="let person of people" [value]="person">{{
+          person
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 </form>
 <div
   class="preview-btn"

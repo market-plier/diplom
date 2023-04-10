@@ -64,7 +64,7 @@
       *ngFor="let item of dataService.templateData.agenda; let i = index"
     >
       <div>{{ i + 1 }}.</div>
-      <div>{{ item }}</div>
+      <div>{{ dataService.getAgendaValue(item) }}</div>
     </div>
     <br />
     <div style="font-weight: bold">Вирішили:</div>
@@ -74,7 +74,7 @@
       *ngFor="let item of dataService.templateData.decision; let i = index"
     >
       <div>{{ i + 1 }}.</div>
-      <div>{{ item }}</div>
+      <div>{{ dataService.getDecisionValue(item) }}</div>
     </div>
     <br />
     <div

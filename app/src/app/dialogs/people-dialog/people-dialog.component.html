@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>Список Присутніх</h2>
+<mat-dialog-content class="mat-typography">
+  <mat-table #table [dataSource]="dataSource">
+    <!-- Position Column -->
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef> Id. </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{ element.id }} </mat-cell>
+    </ng-container>
+    <!-- Name Column -->
+    <ng-container matColumnDef="fullName">
+      <mat-header-cell *matHeaderCellDef> Повне Ім'я </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <mat-form-field>
+          <input
+            matInput
+            [value]="element.fullName"
+            [(ngModel)]="element.fullName"
+          />
+        </mat-form-field>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="dataSource" cdkFocusInitial>
+    Save
+  </button>
+</mat-dialog-actions>

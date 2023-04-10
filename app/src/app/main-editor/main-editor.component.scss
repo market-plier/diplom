@@ -2,7 +2,7 @@
   padding: 20px;
   padding-left: 40px;
   padding-right: 40px;
-  width: 21cm;
+  width: 95%;
   background: white;
   display: block;
   margin: 0 auto;
@@ -35,6 +35,7 @@
     }
     .protocol {
       width: 300px;
+      margin-bottom: 32px;
       textarea {
         text-align: center;
         font-size: 16px;
@@ -42,6 +43,8 @@
       }
     }
     .agenda {
+      margin-bottom: 16px;
+      width: 100%;
       textarea {
         font-size: 14px;
         font-weight: 400;

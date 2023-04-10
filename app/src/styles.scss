@@ -24,3 +24,28 @@ $my-custom-level: mat.define-typography-level(
   $line-height: 1,
   $letter-spacing: normal,
 );
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: none;
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #d3d3d3;
+  background-clip: padding-box;
+  outline: none;
+  border-radius: 4px;
+  border: 2px solid rgba(0, 0, 0, 0.02);
+  -webkit-border-radius: 5px;
+  -webkit-box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05),
+    inset 1px 1px 0px rgba(1, 0, 0, 0.05);
+  box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05),
+    inset 1px 1px 0px rgba(1, 0, 0, 0.05);
+}
+
+::-webkit-scrollbar-corner {
+  background-color: transparent;
+}

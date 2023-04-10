@@ -15,18 +15,25 @@ import { MatIconModule } from '@angular/material/icon';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PreviewComponent } from './preview/preview.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
-
+import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
-
+import { PeopleDialogComponent } from './dialogs/people-dialog/people-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatTableModule } from '@angular/material/table';
+import { EditableModule } from '@ngneat/edit-in-place';
 @NgModule({
   declarations: [
     AppComponent,
     MainEditorComponent,
     SelectAllComponent,
     PreviewComponent,
+    PeopleDialogComponent,
   ],
   imports: [
     BrowserModule,
+    MatDialogModule,
+    MatTableModule,
+    MatCardModule,
     AppRoutingModule,
     MatInputModule,
     MatSelectModule,
@@ -40,6 +47,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatToolbarModule,
     MatTooltipModule,
     MatIconModule,
+    EditableModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

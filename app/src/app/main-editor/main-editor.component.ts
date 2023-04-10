@@ -4,6 +4,18 @@ import { Router } from '@angular/router';
 import { TemplateData } from '../api/contracts/templateData';
 import { headerData, people, protocolData } from '../data/test-data';
 import { DataService } from '../services/data.service';
+import {
+  AgendaData,
+  EducationDegree,
+  EntryBase,
+  FormOfEducation,
+  Nationality,
+  formOfEducationRecord,
+  keywords,
+} from '../data/enums';
+import { pynkts } from '../data/agenda-data-map';
+import { MatDialog } from '@angular/material/dialog';
+import { PeopleDialogComponent } from '../dialogs/people-dialog/people-dialog.component';
 
 @Component({
   selector: 'app-main-editor',
@@ -11,27 +23,46 @@ import { DataService } from '../services/data.service';
   styleUrls: ['./main-editor.component.scss'],
 })
 export class MainEditorComponent {
-  people = people;
   @Input() form: FormGroup;
   @Output() preview = new EventEmitter<TemplateData>();
 
   constructor(
     private formBuilder: FormBuilder,
     private dataService: DataService,
-    private router: Router
+    private router: Router,
+    public dialog: MatDialog
   ) {
     this.form = this.formBuilder.group({
-      header: [dataService._templateData.header, Validators.required],
-      protocol: [dataService._templateData.protocol, Validators.required],
-      people: [dataService._templateData.people, Validators.required],
-      agenda: this.getArrayControlls(dataService._templateData.agenda ?? ['']),
-      // agenda: this.getTestData(),
-      decision: this.getArrayControlls(
-        dataService._templateData.decision ?? ['']
-      ),
-      secretar: [dataService._templateData.secretar, Validators.required],
-      rector: [dataService._templateData.rector, Validators.required],
+      header: [dataService.templateData.header, Validators.required],
+      protocol: [dataService.templateData.protocol, Validators.required],
+      people: [dataService.templateData.people, Validators.required],
+      agenda: this.getAgendaArrayControlls(dataService.templateData.agenda),
+      decision: this.getAgendaArrayControlls(dataService.templateData.decision),
+      secretar: [dataService.templateData.secretar, Validators.required],
+      rector: [dataService.templateData.rector, Validators.required],
     });
+  }
+
+  get people() {
+    return this.dataService.allPeople.map((p) => p.fullName);
+  }
+
+  get keywords() {
+    return keywords;
+  }
+
+  get nationalities() {
+    return Object.values(Nationality);
+  }
+
+  get formsOfEducation() {
+    return Object.values(FormOfEducation);
+  }
+  get entryBases() {
+    return Object.values(EntryBase);
+  }
+  get educationDegrees() {
+    return Object.values(EducationDegree);
   }
 
   get agendaPoints(): FormArray {
@@ -51,58 +82,71 @@ export class MainEditorComponent {
     );
   }
 
-  getTestData() {
+  getAgendaArrayControlls(values: AgendaData[]) {
     return this.formBuilder.array(
-      [
-        this.formBuilder.control(
-          `By default in the CSS box model, the width and height you assign to an element is applied only to the element's content box. If the element has any border or padding, this is then added to the width and height to arrive at the size of the box that's rendered on the screen. This means that when you set width and height, you have to adjust the value you give to allow for any border or padding that may be added. For example, if you have four boxes with width: 25%;, if any has left or right padding or a left or right border, they will not by default fit on one line within the constraints of the parent container.`,
-          Validators.required
-        ),
-        this.formBuilder.control(
-          `By default in the CSS box model, the width and height you assign to an element is applied only to the element's content box. If the element has any border or padding, this is then added to the width and height to arrive at the size of the box that's rendered on the screen. This means that when you set width and height, you have to adjust the value you give to allow for any border or padding that may be added. For example, if you have four boxes with width: 25%;, if any has left or right padding or a left or right border, they will not by default fit on one line within the constraints of the parent container.`,
-          Validators.required
-        ),
-        this.formBuilder.control(
-          `By default in the CSS box model, the width and height you assign to an element is applied only to the element's content box. If the element has any border or padding, this is then added to the width and height to arrive at the size of the box that's rendered on the screen. This means that when you set width and height, you have to adjust the value you give to allow for any border or padding that may be added. For example, if you have four boxes with width: 25%;, if any has left or right padding or a left or right border, they will not by default fit on one line within the constraints of the parent container.`,
-          Validators.required
-        ),
-        this.formBuilder.control(
-          `By default in the CSS box model, the width and height you assign to an element is applied only to the element's content box. If the element has any border or padding, this is then added to the width and height to arrive at the size of the box that's rendered on the screen. This means that when you set width and height, you have to adjust the value you give to allow for any border or padding that may be added. For example, if you have four boxes with width: 25%;, if any has left or right padding or a left or right border, they will not by default fit on one line within the constraints of the parent container.`,
-          Validators.required
-        ),
-      ],
+      values.map((value) => this.createAgendaGroup(value)),
       Validators.required
     );
   }
 
-  addAgendaPoint() {
-    const agendaControll = this.formBuilder.control('', Validators.required);
+  getAgendaValue(agendaForm: FormGroup) {
+    const agendaData = agendaForm.value as AgendaData;
+    return this.dataService.getDecisionValue(agendaData);
+  }
 
+  getDecisionValue(decisionForm: FormGroup) {
+    const decisionData = decisionForm.value as AgendaData;
+    return this.dataService.getDecisionValue(decisionData);
+  }
+
+  createAgendaGroup(agenda?: AgendaData) {
+    return this.formBuilder.group({
+      keyword: [agenda?.keyword, Validators.required],
+      nationality: [agenda?.nationality, Validators.required],
+      formOfEducation: [agenda?.formOfEducation, Validators.required],
+      entryBase: [agenda?.entryBase, Validators.required],
+      educationDegree: [agenda?.educationDegree, Validators.required],
+    });
+  }
+
+  addAgendaPoint() {
+    const agendaControll = this.createAgendaGroup();
+    const decisionControll = this.createAgendaGroup();
+
+    this.decisionPoints.push(decisionControll);
     this.agendaPoints.push(agendaControll);
   }
 
   deleteAgendaPoint(agendaIndex: number) {
     this.agendaPoints.removeAt(agendaIndex);
-  }
-
-  addDecisionPoint() {
-    const decisionControll = this.formBuilder.control('', Validators.required);
-
-    this.decisionPoints.push(decisionControll);
-  }
-
-  deleteDecisionPoint(decisionIndex: number) {
-    this.decisionPoints.removeAt(decisionIndex);
+    this.decisionPoints.removeAt(agendaIndex);
   }
 
   onPreviewClick() {
+    console.log(this.form.getRawValue());
     localStorage.setItem(
       'documentData',
       JSON.stringify(this.form.getRawValue())
     );
-    this.dataService._templateData = JSON.parse(
+    this.dataService.templateData = JSON.parse(
       localStorage.getItem('documentData') ?? '{}'
     ) as TemplateData;
     this.router.navigate(['preview']);
+  }
+
+  openDialog() {
+    this.dialog
+      .open(PeopleDialogComponent, {
+        data: {
+          values: JSON.parse(JSON.stringify(this.dataService.people)),
+        },
+        width: '800px',
+      })
+      .afterClosed()
+      .subscribe((value) => {
+        if (value) {
+          this.dataService.allPeople = value;
+        }
+      });
   }
 }
