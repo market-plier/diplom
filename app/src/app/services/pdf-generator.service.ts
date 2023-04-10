@@ -22,7 +22,6 @@ export class PdfGeneratorService {
         doc.save('protocol.pdf');
       },
       autoPaging: 'text',
-      margin: [10, 0, 25, 25],
       width: 180, //target width in the PDF document
       windowWidth: 700, //window width in CSS pixels
     });
