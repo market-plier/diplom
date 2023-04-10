@@ -91,7 +91,7 @@ export class MainEditorComponent {
 
   getAgendaValue(agendaForm: FormGroup) {
     const agendaData = agendaForm.value as AgendaData;
-    return this.dataService.getDecisionValue(agendaData);
+    return this.dataService.getAgendaValue(agendaData);
   }
 
   getDecisionValue(decisionForm: FormGroup) {
