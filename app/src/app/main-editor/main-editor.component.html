@@ -38,97 +38,21 @@
     </mat-select>
   </mat-form-field>
   <p>Порядок денний:</p>
-  <ng-container formArrayName="agenda">
+  <ng-container formArrayName="agendaKeys">
     <ng-container
       *ngFor="let agendaForm of agendaPoints.controls; let i = index"
     >
-      <div [formGroup]="$any(agendaForm)" class="point">
-        <span class="counter">{{ i + 1 }}.</span>
-        <mat-form-field style="min-width: 300px" appearance="fill">
-          <mat-label>Подія</mat-label>
-          <mat-select formControlName="keyword">
-            <mat-option *ngFor="let keyword of keywords" [value]="keyword">{{
-              keyword
-            }}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Громадянство</mat-label>
-          <mat-select formControlName="nationality">
-            <mat-option
-              *ngFor="let nationality of nationalities"
-              [value]="nationality"
-              >{{ nationality }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Форма навчання</mat-label>
-          <mat-select formControlName="formOfEducation">
-            <mat-option
-              *ngFor="let formOfEducation of formsOfEducation"
-              [value]="formOfEducation"
-              >{{ formOfEducation }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>База вступу</mat-label>
-          <mat-select formControlName="entryBase">
-            <mat-option
-              *ngFor="let entryBase of entryBases"
-              [value]="entryBase"
-              >{{ entryBase }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Освітній ступінь</mat-label>
-          <mat-select formControlName="educationDegree">
-            <mat-option
-              *ngFor="let educationDegree of educationDegrees"
-              [value]="educationDegree"
-              >{{ educationDegree }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
-
-        <button
-          mat-icon-button
-          matSuffix
-          [disabled]="agendaPoints.length === 1"
-          (click)="deleteAgendaPoint(i)"
-        >
-          <mat-icon>delete_forever</mat-icon>
-        </button>
-      </div>
-      <mat-card class="agenda">
-        <mat-card-content>
-          <span>{{ getAgendaValue($any(agendaForm)) }}</span></mat-card-content
-        >
-      </mat-card>
-    </ng-container>
-  </ng-container>
-  <button mat-raised-button color="secondary" (click)="addAgendaPoint()">
-    Додати пункт
-  </button>
-  <br />
-  <p>Вирішили:</p>
-  <ng-container formArrayName="decision">
-    <ng-container
-      *ngFor="let decisionForm of decisionPoints.controls; let i = index"
-    >
-      <div class="point">
-        <span class="counter">{{ i + 1 }}.</span>
-
-        <div [formGroup]="$any(decisionForm)" class="point">
+      <div style="width: 100%" [formGroup]="$any(agendaForm)">
+        <div class="point">
           <span class="counter">{{ i + 1 }}.</span>
           <mat-form-field style="min-width: 300px" appearance="fill">
             <mat-label>Подія</mat-label>
             <mat-select formControlName="keyword">
-              <mat-option *ngFor="let keyword of keywords" [value]="keyword">{{
-                keyword
-              }}</mat-option>
+              <mat-option
+                *ngFor="let keyword of keys$ | async"
+                [value]="keyword"
+                >{{ keyword }}</mat-option
+              >
             </mat-select>
           </mat-form-field>
           <mat-form-field appearance="fill">
@@ -171,17 +95,58 @@
               >
             </mat-select>
           </mat-form-field>
+
+          <button
+            mat-icon-button
+            matSuffix
+            [disabled]="agendaPoints.length === 1"
+            (click)="deleteAgendaPoint(i)"
+          >
+            <mat-icon>delete_forever</mat-icon>
+          </button>
         </div>
+        <mat-card class="agenda">
+          <mat-card-content>
+            <span>{{
+              getAgendaValue(i + 1, $any(agendaForm))
+            }}</span></mat-card-content
+          >
+        </mat-card>
+        <br />
+        <p>Вирішили:</p>
+        <mat-form-field appearance="fill">
+          <mat-label>Слухали:</mat-label>
+          <mat-select formControlName="heard">
+            <mat-option
+              *ngFor="let staffKey of staffKeys$ | async"
+              [value]="staffKey"
+              >{{ staffKey }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Виступив:</mat-label>
+          <mat-select formControlName="speaker">
+            <mat-option
+              *ngFor="let staffKey of staffKeys$ | async"
+              [value]="staffKey"
+              >{{ staffKey }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+        <mat-card class="agenda">
+          <mat-card-content>
+            <span>{{
+              getDecisionValue(i + 1, $any(agendaForm))
+            }}</span></mat-card-content
+          >
+        </mat-card>
       </div>
-      <mat-card class="agenda">
-        <mat-card-content>
-          <span>{{
-            getDecisionValue($any(decisionForm))
-          }}</span></mat-card-content
-        >
-      </mat-card>
     </ng-container>
   </ng-container>
+  <button mat-raised-button color="secondary" (click)="addAgendaPoint()">
+    Додати пункт
+  </button>
   <br />
   <div
     style="

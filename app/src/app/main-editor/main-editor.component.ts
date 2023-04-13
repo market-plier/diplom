@@ -5,17 +5,27 @@ import { TemplateData } from '../api/contracts/templateData';
 import { headerData, people, protocolData } from '../data/test-data';
 import { DataService } from '../services/data.service';
 import {
-  AgendaData,
+  AgendaCompositeKey,
   EducationDegree,
   EntryBase,
   FormOfEducation,
   Nationality,
   formOfEducationRecord,
   keywords,
-} from '../data/enums';
-import { pynkts } from '../data/agenda-data-map';
+} from '../api/contracts/enums';
 import { MatDialog } from '@angular/material/dialog';
 import { PeopleDialogComponent } from '../dialogs/people-dialog/people-dialog.component';
+import { Store } from '@ngrx/store';
+import {
+  selectAgendaKeys,
+  selectAgendasByKeys,
+  selectStaffKeys,
+  selectTemplateData,
+} from '../store/selectors';
+import { first, tap } from 'rxjs';
+import { Agenda } from '../api/contracts/agenda';
+import { TextBuilderService } from '../services/text-builder.service';
+import { TemplateDataActions } from '../store/actions';
 
 @Component({
   selector: 'app-main-editor',
@@ -30,25 +40,43 @@ export class MainEditorComponent {
     private formBuilder: FormBuilder,
     private dataService: DataService,
     private router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private store: Store,
+    private textService: TextBuilderService
   ) {
     this.form = this.formBuilder.group({
-      header: [dataService.templateData.header, Validators.required],
-      protocol: [dataService.templateData.protocol, Validators.required],
-      people: [dataService.templateData.people, Validators.required],
-      agenda: this.getAgendaArrayControlls(dataService.templateData.agenda),
-      decision: this.getAgendaArrayControlls(dataService.templateData.decision),
-      secretar: [dataService.templateData.secretar, Validators.required],
-      rector: [dataService.templateData.rector, Validators.required],
+      header: ['', Validators.required],
+      protocol: ['', Validators.required],
+      people: ['', Validators.required],
+      agendaKeys: this.getAgendaArrayControlls([]),
+      secretar: [, Validators.required],
+      rector: ['', Validators.required],
+    });
+    this.store
+      .select(selectTemplateData)
+      .pipe(first())
+      .subscribe((templateData) => {
+        this.form.patchValue(templateData);
+        if (templateData.agendaKeys) {
+          templateData.agendaKeys.forEach((a) => {
+            this.addAgendaPoint(a);
+          });
+        } else {
+          this.addAgendaPoint();
+        }
+      });
+    this.form.valueChanges.subscribe((value) => {
+      this.store.dispatch(
+        TemplateDataActions.updateTemplateData({ templateData: value })
+      );
     });
   }
 
+  keys$ = this.store.select(selectAgendaKeys);
+  staffKeys$ = this.store.select(selectStaffKeys);
+
   get people() {
     return this.dataService.allPeople.map((p) => p.fullName);
-  }
-
-  get keywords() {
-    return keywords;
   }
 
   get nationalities() {
@@ -66,11 +94,7 @@ export class MainEditorComponent {
   }
 
   get agendaPoints(): FormArray {
-    return this.form.get('agenda') as FormArray;
-  }
-
-  get decisionPoints(): FormArray {
-    return this.form.get('decision') as FormArray;
+    return this.form.get('agendaKeys') as FormArray;
   }
 
   getArrayControlls(values: string[]) {
@@ -82,44 +106,52 @@ export class MainEditorComponent {
     );
   }
 
-  getAgendaArrayControlls(values: AgendaData[]) {
+  getAgendaArrayControlls(values: AgendaCompositeKey[]) {
     return this.formBuilder.array(
       values.map((value) => this.createAgendaGroup(value)),
       Validators.required
     );
   }
 
-  getAgendaValue(agendaForm: FormGroup) {
-    const agendaData = agendaForm.value as AgendaData;
-    return this.dataService.getAgendaValue(agendaData);
+  getAgendaValue(questionId: number, agendaForm: FormGroup) {
+    const agendaKey = agendaForm.value as AgendaCompositeKey;
+    const agenda = this.dataService.getAgendaByKey(agendaKey);
+    return this.textService.getAgendaValue(questionId, agenda);
   }
 
-  getDecisionValue(decisionForm: FormGroup) {
-    const decisionData = decisionForm.value as AgendaData;
-    return this.dataService.getDecisionValue(decisionData);
+  getDecisionValue(questionId: number, decisionForm: FormGroup) {
+    const agendaKey = decisionForm.value as AgendaCompositeKey;
+    const agenda = this.dataService.getAgendaByKey(agendaKey);
+    const heard = this.dataService.getStaffByKey(agendaKey.heard ?? '');
+    const speaker = this.dataService.getStaffByKey(agendaKey.speaker ?? '');
+    return this.textService.getDecisionValue(
+      questionId,
+      agenda,
+      heard,
+      speaker
+    );
   }
 
-  createAgendaGroup(agenda?: AgendaData) {
+  createAgendaGroup(agenda?: AgendaCompositeKey) {
     return this.formBuilder.group({
       keyword: [agenda?.keyword, Validators.required],
       nationality: [agenda?.nationality, Validators.required],
       formOfEducation: [agenda?.formOfEducation, Validators.required],
       entryBase: [agenda?.entryBase, Validators.required],
       educationDegree: [agenda?.educationDegree, Validators.required],
+      speaker: [agenda?.speaker, Validators.required],
+      heard: [agenda?.heard, Validators.required],
     });
   }
 
-  addAgendaPoint() {
-    const agendaControll = this.createAgendaGroup();
-    const decisionControll = this.createAgendaGroup();
+  addAgendaPoint(agendaKey?: AgendaCompositeKey) {
+    const agendaControll = this.createAgendaGroup(agendaKey);
 
-    this.decisionPoints.push(decisionControll);
     this.agendaPoints.push(agendaControll);
   }
 
   deleteAgendaPoint(agendaIndex: number) {
     this.agendaPoints.removeAt(agendaIndex);
-    this.decisionPoints.removeAt(agendaIndex);
   }
 
   onPreviewClick() {
@@ -128,9 +160,10 @@ export class MainEditorComponent {
       'documentData',
       JSON.stringify(this.form.getRawValue())
     );
-    this.dataService.templateData = JSON.parse(
+    const templateData = JSON.parse(
       localStorage.getItem('documentData') ?? '{}'
     ) as TemplateData;
+    this.dataService.updateTemplateData(templateData);
     this.router.navigate(['preview']);
   }
 

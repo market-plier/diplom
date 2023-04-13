@@ -1,11 +1,10 @@
-import { AgendaData } from 'src/app/data/enums';
+import { AgendaCompositeKey } from 'src/app/api/contracts/enums';
 
 export interface TemplateData {
   header?: string;
   protocol?: string;
   people?: { id: string; fullName: string }[];
-  agenda: AgendaData[];
-  decision: AgendaData[];
+  agendaKeys?: AgendaCompositeKey[];
   secretar?: string;
   rector?: string;
 }

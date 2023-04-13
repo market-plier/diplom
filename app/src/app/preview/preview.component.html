@@ -31,7 +31,7 @@
           white-space: pre-wrap;
         "
       >
-        {{ dataService.templateData.header }}
+        {{ (templateData$ | async)?.header }}
       </div>
       <img
         height="77"
@@ -48,18 +48,18 @@
           white-space: pre-wrap;
         "
       >
-        {{ dataService.templateData.protocol }}
+        {{ (templateData$ | async)?.protocol }}
       </div>
     </div>
     <br />
     <div
-      *ngIf="dataService.templateData.people?.length"
+      *ngIf="(templateData$ | async)?.people?.length"
       style="font-size: 16px"
     >
       <div style="font-weight: bold">Присутні</div>
       <br />
       <div style="font-weight: normal">
-        <span>{{ dataService.templateData.people?.join("; ")?.trim() }}</span>
+        <span>{{ (templateData$ | async)?.people?.join("; ")?.trim() }}</span>
       </div>
     </div>
     <br />
@@ -67,27 +67,27 @@
     <br />
     <div
       style="display: flex; margin-left: 43px; gap: 7px; margin-top: 3px"
-      *ngFor="let item of dataService.templateData.agenda; let i = index"
+      *ngFor="let item of (templateData$ | async)?.agendaKeys; let i = index"
     >
       <div>{{ i + 1 }}.</div>
-      <div>{{ dataService.getAgendaValue(item) }}</div>
+      <div>{{ getAgendaValue(item, i + 1) }}</div>
     </div>
     <br />
     <div style="font-weight: bold">Вирішили:</div>
     <br />
     <div
       style="display: flex; margin-left: 43px; gap: 7px; margin-top: 3px"
-      *ngFor="let item of dataService.templateData.decision; let i = index"
+      *ngFor="let item of (templateData$ | async)?.agendaKeys; let i = index"
     >
       <div>{{ i + 1 }}.</div>
-      <div>{{ dataService.getDecisionValue(item) }}</div>
+      <div>{{ getDecisionValue(item, i + 1) }}</div>
     </div>
     <br />
     <div
       style="margin-left: 63px; display: flex; justify-content: space-between"
     >
       <div>Ректор</div>
-      <div style="min-width: 170px">{{ dataService.templateData.rector }}</div>
+      <div style="min-width: 170px">{{ (templateData$ | async)?.rector }}</div>
     </div>
     <br />
     <div
@@ -95,7 +95,7 @@
     >
       <div>Відповідальний секретар ПК</div>
       <div style="min-width: 170px">
-        <span>{{ dataService.templateData.secretar }}</span>
+        <span>{{ (templateData$ | async)?.secretar }}</span>
       </div>
     </div>
   </div>

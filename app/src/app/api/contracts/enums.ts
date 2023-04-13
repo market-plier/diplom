@@ -1,5 +1,4 @@
-import { pynkts } from './agenda-data-map';
-import { agendaData } from './test-data';
+import { _agendaData } from 'src/app/data/agenda-data-map';
 
 export enum Nationality {
   all = 'Усі',
@@ -23,6 +22,7 @@ export enum FormOfEducation {
   daily = 'Денна',
   evening = 'Вечірня',
   dz = 'Д&З',
+  dv = 'Д&В',
 }
 
 export type FormOfEducationType =
@@ -30,6 +30,7 @@ export type FormOfEducationType =
   | 'Заочна'
   | 'Денна'
   | 'Вечірня'
+  | 'Д&В'
   | 'Д&З';
 
 export const formOfEducationRecord: Record<
@@ -41,6 +42,7 @@ export const formOfEducationRecord: Record<
   [FormOfEducation.daily]: 'Денна',
   [FormOfEducation.evening]: 'Вечірня',
   [FormOfEducation.dz]: 'Д&З',
+  [FormOfEducation.dv]: 'Д&В',
 };
 
 export enum EntryBase {
@@ -116,12 +118,14 @@ export const educationDegreeRecord: Record<
   [EducationDegree.all]: 'Усі',
 };
 
-export interface AgendaData {
+export interface AgendaCompositeKey {
   keyword?: string;
   nationality?: NationalityType;
   entryBase?: EntryBaseType;
   educationDegree?: EducationDegreeType;
   formOfEducation?: FormOfEducationType;
+  speaker?: string;
+  heard?: string;
 }
 
-export const keywords = [...new Set(pynkts.map((pynkt) => pynkt.keyword))];
+export const keywords = [...new Set(_agendaData.map((pynkt) => pynkt.key))];

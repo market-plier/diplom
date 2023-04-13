@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -21,6 +21,9 @@ import { PeopleDialogComponent } from './dialogs/people-dialog/people-dialog.com
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { EditableModule } from '@ngneat/edit-in-place';
+import { StoreModule } from '@ngrx/store';
+import { stateReducer } from './store/reducers';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 @NgModule({
   declarations: [
     AppComponent,
@@ -48,6 +51,8 @@ import { EditableModule } from '@ngneat/edit-in-place';
     MatTooltipModule,
     MatIconModule,
     EditableModule,
+    StoreModule.forRoot({ state: stateReducer }),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
   ],
   providers: [],
   bootstrap: [AppComponent],
