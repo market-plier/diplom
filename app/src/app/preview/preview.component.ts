@@ -1,13 +1,12 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { tap } from 'rxjs';
 import { logoUrlData } from 'src/assets/images';
-import { TemplateData } from '../api/contracts/templateData';
+import { AgendaCompositeKey } from '../api/contracts/agenda';
 import { DataService } from '../services/data.service';
 import { PdfGeneratorService } from '../services/pdf-generator.service';
-import { Store } from '@ngrx/store';
-import { selectAgendasByKeys, selectTemplateData } from '../store/selectors';
 import { TextBuilderService } from '../services/text-builder.service';
-import { AgendaCompositeKey } from '../api/contracts/enums';
-import { tap } from 'rxjs';
+import { selectTemplateData } from '../store/selectors';
 
 @Component({
   selector: 'app-preview',

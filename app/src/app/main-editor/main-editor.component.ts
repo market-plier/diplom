@@ -1,31 +1,27 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { TemplateData } from '../api/contracts/templateData';
-import { headerData, people, protocolData } from '../data/test-data';
-import { DataService } from '../services/data.service';
+import { Store } from '@ngrx/store';
+import { first } from 'rxjs';
+import { AgendaCompositeKey, IApplicantPoint } from '../api/contracts/agenda';
 import {
-  AgendaCompositeKey,
   EducationDegree,
   EntryBase,
   FormOfEducation,
   Nationality,
-  formOfEducationRecord,
-  keywords,
 } from '../api/contracts/enums';
-import { MatDialog } from '@angular/material/dialog';
+import { TemplateData } from '../api/contracts/templateData';
 import { PeopleDialogComponent } from '../dialogs/people-dialog/people-dialog.component';
-import { Store } from '@ngrx/store';
-import {
-  selectAgendaKeys,
-  selectAgendasByKeys,
-  selectStaffKeys,
-  selectTemplateData,
-} from '../store/selectors';
-import { first, tap } from 'rxjs';
-import { Agenda } from '../api/contracts/agenda';
+import { DataService } from '../services/data.service';
 import { TextBuilderService } from '../services/text-builder.service';
 import { TemplateDataActions } from '../store/actions';
+import {
+  selectAgendaKeys,
+  selectStaffKeys,
+  selectStaffResolutions,
+  selectTemplateData,
+} from '../store/selectors';
 
 @Component({
   selector: 'app-main-editor',
@@ -35,6 +31,10 @@ import { TemplateDataActions } from '../store/actions';
 export class MainEditorComponent {
   @Input() form: FormGroup;
   @Output() preview = new EventEmitter<TemplateData>();
+
+  keys$ = this.store.select(selectAgendaKeys);
+  staffKeys$ = this.store.select(selectStaffKeys);
+  staffResolutions$ = this.store.select(selectStaffResolutions);
 
   constructor(
     private formBuilder: FormBuilder,
@@ -71,9 +71,6 @@ export class MainEditorComponent {
       );
     });
   }
-
-  keys$ = this.store.select(selectAgendaKeys);
-  staffKeys$ = this.store.select(selectStaffKeys);
 
   get people() {
     return this.dataService.allPeople.map((p) => p.fullName);
@@ -132,6 +129,12 @@ export class MainEditorComponent {
     );
   }
 
+  getApplicants(agendaForm: FormGroup) {
+    const agendaKey = agendaForm.value as AgendaCompositeKey;
+    const applicants = this.dataService.getApplicantsByKey(agendaKey);
+    return applicants;
+  }
+
   createAgendaGroup(agenda?: AgendaCompositeKey) {
     return this.formBuilder.group({
       keyword: [agenda?.keyword, Validators.required],
@@ -141,7 +144,40 @@ export class MainEditorComponent {
       educationDegree: [agenda?.educationDegree, Validators.required],
       speaker: [agenda?.speaker, Validators.required],
       heard: [agenda?.heard, Validators.required],
+      applicantPoints: this.createApplicantsArrayControll(
+        agenda?.applicantPoints ?? []
+      ),
     });
+  }
+
+  createApplicantsArrayControll(applicants: IApplicantPoint[] = []) {
+    return this.formBuilder.array(
+      applicants.map((a) => this.createApplicantGroup(a)),
+      Validators.required
+    );
+  }
+
+  createApplicantGroup(applicantPoint?: IApplicantPoint) {
+    return this.formBuilder.group({
+      applicant: [applicantPoint?.applicants, Validators.required],
+      source: [applicantPoint?.source, Validators.required],
+      resolution: [applicantPoint?.resolution, Validators.required],
+    });
+  }
+
+  getApplicantArrayControll(agendaForm: FormGroup) {
+    console.log(agendaForm.get('applicantPoints'));
+    return agendaForm.get('applicantPoints') as FormArray;
+  }
+
+  addApplicantPoint(agendaForm: FormGroup, applicantPoint?: IApplicantPoint) {
+    const applicantControll = this.createApplicantGroup(applicantPoint);
+
+    this.getApplicantArrayControll(agendaForm).push(applicantControll);
+  }
+
+  deleteApplicantPoint(agendaForm: FormGroup, agendaIndex: number) {
+    this.getApplicantArrayControll(agendaForm).removeAt(agendaIndex);
   }
 
   addAgendaPoint(agendaKey?: AgendaCompositeKey) {

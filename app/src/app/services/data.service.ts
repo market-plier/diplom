@@ -1,16 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
-import { Agenda } from '../api/contracts/agenda';
+import { AgendaCompositeKey } from '../api/contracts/agenda';
+import { Applicant, IApplicant } from '../api/contracts/applicant';
+import { Staff } from '../api/contracts/staff';
 import { TemplateData } from '../api/contracts/templateData';
 import { _agendaData } from '../data/agenda-data-map';
-import { headerData, peopleData, protocolData } from '../data/test-data';
-import { StaffDataActions, TemplateDataActions } from '../store/actions';
-import { AgendaCompositeKey } from '../api/contracts/enums';
-import { Staff } from '../api/contracts/staff';
-import { selectState } from '../store/selectors';
-import { State } from '../store/state';
+import { ApplicantsData } from '../data/applicants-data';
 import { staffData } from '../data/staff-data';
+import { headerData, peopleData, protocolData } from '../data/test-data';
+import {
+  ApplicantDataActions,
+  StaffDataActions,
+  TemplateDataActions,
+} from '../store/actions';
+import { selectApplicants, selectState } from '../store/selectors';
+import { State } from '../store/state';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +23,7 @@ import { staffData } from '../data/staff-data';
 export class DataService {
   allPeople = peopleData;
   state!: State;
+  applicants!: Applicant[];
 
   get people() {
     return this.allPeople;
@@ -38,7 +44,11 @@ export class DataService {
       localStorage.clear();
     }
     this.updateStaffData(staffData);
+    this.updateApplicantsData(ApplicantsData);
     this.store.select(selectState).subscribe((value) => (this.state = value));
+    this.store
+      .select(selectApplicants)
+      .subscribe((value) => (this.applicants = value));
   }
 
   getAgenda() {
@@ -60,6 +70,15 @@ export class DataService {
     );
   }
 
+  getApplicantsByKey(ak?: AgendaCompositeKey) {
+    return this.applicants.filter(
+      (a) =>
+        ak?.educationDegree === a.getEducationDegree() &&
+        ak?.entryBase === a.getEntryBase() &&
+        ak?.nationality === a.getNationality()
+    );
+  }
+
   updateTemplateData(templateData: TemplateData) {
     this.store.dispatch(
       TemplateDataActions.updateTemplateData({ templateData })
@@ -68,5 +87,11 @@ export class DataService {
 
   updateStaffData(staff: Staff[]) {
     this.store.dispatch(StaffDataActions.updateStaffData({ staff }));
+  }
+
+  updateApplicantsData(applicants: IApplicant[]) {
+    this.store.dispatch(
+      ApplicantDataActions.updateApplicantData({ applicants })
+    );
   }
 }
