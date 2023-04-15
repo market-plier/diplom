@@ -64,9 +64,7 @@ export class TextBuilderService {
       agenda.key ==
         'Зміна фінансування серед зарахованих на контракт за рейтингом' ||
       agenda.key == 'Зміна фінансування серед пільгових категорій'
-      ? (applicant.applicant.addition == ''
-          ? ''
-          : applicant.applicant.addition + ' ') +
+      ? (addition == '' ? '' : addition + ' ') +
           applicant.applicant.fullName +
           ', IDe - ' +
           applicant.applicant.idCard +
@@ -97,7 +95,7 @@ export class TextBuilderService {
             'Зміна фінансування серед зарахованих на контракт за рейтингом' ||
           agenda.key == 'Зміна фінансування серед пільгових категорій'
             ? ''
-            : applicant.getFullSourceOfFunding) +
+            : applicant.getFullSourceOfFunding()) +
           ', ' +
           (applicant.getEducationDegree() == 'Phd'
             ? applicant.getFacultyFullName2022()
@@ -116,15 +114,17 @@ export class TextBuilderService {
           ' за спеціальністю «' +
           (!applicant.applicant.idEducationProgram.length
             ? applicant.applicant.specialty
-            : applicant.getEducationProgram()) +
+            : applicant.getEducationProgramSpecialty()) +
           '», ' +
           (applicant.getSpecialtyNumbers() == '035' ||
           applicant.getSpecialtyNumbers() == '022' ||
           applicant.getSpecialtyNumbers() == '014'
-            ? 'спеціалізація «' + applicant.getEducationProgram() + '», '
+            ? 'спеціалізація «' +
+              applicant.getEducationProgramSpecialty() +
+              '», '
             : ' ') +
           (applicant.getEducationDegree() == 'Phd'
-            ? 'освітня програма «' + applicant.getEducationProgram()
+            ? 'освітня програма «' + applicant.getEducationProgramSpecialty()
             : agenda.key == 'Зміна фінансування' ||
               agenda.key == 'Зміна фінансування кк4' ||
               agenda.key == 'Зміна фінансування кк5' ||
@@ -137,14 +137,16 @@ export class TextBuilderService {
               ? 'з подальшим розподілом на одну з освітніх програм «' +
                 applicant.getKpOsvintiProgrami() +
                 '»'
-              : ' освітня програма «' + applicant.getEducationProgram() + '»'
+              : ' освітня програма «' +
+                applicant.getEducationProgramSpecialty() +
+                '»'
             : applicant.applicant.idEducationProgram.length
             ? 'з освітньої програми «' +
               applicant.getKpOsvintiProgrami() +
               '» на освітню програму «' +
-              applicant.getEducationProgram() +
+              applicant.getEducationProgramSpecialty() +
               '»' +
-              applicant.getEducationProgram() +
+              applicant.getEducationProgramSpecialty() +
               (source == ''
                 ? '.'
                 : '. ' +
