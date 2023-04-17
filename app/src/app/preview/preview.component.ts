@@ -1,6 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { tap } from 'rxjs';
 import { logoUrlData } from 'src/assets/images';
 import { AgendaCompositeKey } from '../api/contracts/agenda';
 import { DataService } from '../services/data.service';
@@ -16,9 +15,7 @@ import { selectTemplateData } from '../store/selectors';
 export class PreviewComponent {
   @ViewChild('document') document!: ElementRef;
   logo = logoUrlData;
-  templateData$ = this.store
-    .select(selectTemplateData)
-    .pipe(tap((x) => console.log(x)));
+  templateData$ = this.store.select(selectTemplateData);
   constructor(
     private pdfService: PdfGeneratorService,
     public readonly dataService: DataService,
@@ -35,15 +32,30 @@ export class PreviewComponent {
     return this.textService.getAgendaValue(questionId, agenda);
   }
 
-  getDecisionValue(agendaKey: AgendaCompositeKey, questionId: number) {
+  getDecisionValue(agendaKey: AgendaCompositeKey, questionId: number): string {
     const agenda = this.dataService.getAgendaByKey(agendaKey);
     const heard = this.dataService.getStaffByKey(agendaKey.heard ?? '');
     const speaker = this.dataService.getStaffByKey(agendaKey.speaker ?? '');
-    return this.textService.getDecisionValue(
-      questionId,
-      agenda,
-      heard,
-      speaker
-    );
+    const applicantPoints = agendaKey.applicantPoints?.map((a) => {
+      return {
+        applicant: this.dataService.getApplicantByFullName(a.applicant ?? ''),
+        source: a.source ?? '',
+        resolution: a.resolution ?? '',
+        zavKurs: a.zavKurs ?? '',
+        previousEducationalEstablishment:
+          a.previousEducationalEstablishment ?? '',
+        addition: a.addition ?? '',
+      };
+    });
+    if (agenda) {
+      return this.textService.getDecisionValue(
+        questionId,
+        agenda,
+        heard,
+        speaker,
+        applicantPoints
+      );
+    }
+    return '';
   }
 }

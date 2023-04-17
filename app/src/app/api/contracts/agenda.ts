@@ -25,6 +25,7 @@ export interface AgendaCompositeKey {
   keyword?: string;
   nationality?: NationalityType;
   entryBase?: EntryBaseType;
+  agendaAddition?: string;
   educationDegree?: EducationDegreeType;
   formOfEducation?: FormOfEducationType;
   speaker?: string;
@@ -33,9 +34,12 @@ export interface AgendaCompositeKey {
 }
 
 export interface IApplicantPoint {
-  applicants?: string;
+  applicant?: string;
   source?: string;
   resolution?: string;
+  zavKurs?: string;
+  previousEducationalEstablishment?: string;
+  addition?: string;
 }
 
 export const keywords = [...new Set(_agendaData.map((pynkt) => pynkt.key))];

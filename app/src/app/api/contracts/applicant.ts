@@ -3,8 +3,8 @@ import { EducationDegreeData } from 'src/app/data/educationDegree-data';
 import { EntryBaseData } from 'src/app/data/entryBase-data';
 import { FacultyData } from 'src/app/data/faculty-data';
 import { Kp } from 'src/app/data/kp';
+import { staffData } from 'src/app/data/staff-data';
 import { ZayaviInshiData } from 'src/app/data/zayavi-Inshi-data';
-
 export interface IApplicant {
   fullName: string;
   idCard: string;
@@ -33,11 +33,13 @@ export class Applicant {
     this.applicant = data;
   }
   getFullNameR() {
-    throw new Error('');
+    console.warn('needs connection to backend');
+    return this.applicant.fullName;
   }
 
   getFullNameD() {
-    throw new Error('');
+    console.warn('needs connection to backend');
+    return this.applicant.fullName;
   }
 
   getNationality() {
@@ -49,7 +51,7 @@ export class Applicant {
   }
 
   getFullEDucationForm() {
-    return this.applicant.formOfEducationFull === 'Заочна'
+    return this.applicant.formOfEducationFull.toLowerCase() === 'заочна'
       ? 'заочної форми навчання'
       : 'денної форми навчання';
   }
@@ -64,47 +66,99 @@ export class Applicant {
 
   getEducationDegree() {
     return EducationDegreeData.find(
-      (e) => e.educationDegreeFull === this.applicant.educationDegreeFull
+      (e) =>
+        e.educationDegreeFull.toLowerCase() ===
+        this.applicant.educationDegreeFull.toLowerCase()
     )?.educationDegree;
   }
 
   getEducationDegreeR() {
     return EducationDegreeData.find(
-      (e) => e.educationDegreeFull === this.applicant.educationDegreeFull
+      (e) =>
+        e.educationDegreeFull.toLowerCase() ===
+        this.applicant.educationDegreeFull.toLowerCase()
     )?.educationDegreeText_r;
   }
 
   getEntryBase() {
     return EntryBaseData.find(
-      (e) => e.entryBaseFull === this.applicant.entryBaseFull
+      (e) =>
+        e.entryBaseFull.toLowerCase() ===
+        this.applicant.entryBaseFull.toLowerCase()
     )?.entryBase;
   }
 
   getEntryBaseStup() {
     return EntryBaseData.find(
-      (e) => e.entryBaseFull === this.applicant.entryBaseFull
+      (e) =>
+        e.entryBaseFull.toLowerCase() ===
+        this.applicant.entryBaseFull.toLowerCase()
     )?.stup;
   }
 
   getEntryBaseFullR() {
     return EntryBaseData.find(
-      (e) => e.entryBaseFull === this.applicant.entryBaseFull
+      (e) =>
+        e.entryBaseFull.toLowerCase() ===
+        this.applicant.entryBaseFull.toLowerCase()
     )?.enrtyBaseFull_r;
   }
 
   getFacultyFullName2022() {
-    return FacultyData.find((f) => f.fullName === this.applicant.facultyFull)
-      ?.fullName_r_2022;
+    return FacultyData.find(
+      (f) =>
+        f.fullName.toLowerCase() === this.applicant.facultyFull.toLowerCase()
+    )?.fullName_r_2022;
+  }
+
+  getFaculty() {
+    return FacultyData.find(
+      (f) =>
+        f.fullName.toLowerCase() === this.applicant.facultyFull.toLowerCase()
+    )?.faculty;
+  }
+
+  getFacultyFormFull2021() {
+    return FacultyData.find(
+      (f) =>
+        f.fullName.toLowerCase() === this.applicant.facultyFull.toLowerCase()
+    )?.fullForm;
   }
 
   getFacultyFullNameR() {
-    return FacultyData.find((f) => f.fullName === this.applicant.facultyFull)
-      ?.fullName_r;
+    return FacultyData.find(
+      (f) =>
+        f.fullName.toLowerCase() === this.applicant.facultyFull.toLowerCase()
+    )?.fullName_r;
   }
 
-  getEducationProgram() {
+  getPKFaculty() {
+    return staffData.find(
+      (s) => s.subdivision.toLowerCase() === this.getFaculty()?.toLowerCase()
+    )?.position_r;
+  }
+
+  getEducationProgramName() {
     return EducationProgramData.find(
-      (d) => d.idEducationProgram === this.applicant.idEducationProgram
+      (d) =>
+        d.idEducationProgram.toLowerCase() ===
+        this.applicant.idEducationProgram.toLowerCase()
+    )?.fullName;
+  }
+
+  getFinFull() {
+    return this.applicant.sourceOfFunding.toLowerCase() === 'бюджет'
+      ? 'за рахунок видатків державного бюджету'
+      : this.applicant.sourceOfFunding.toLowerCase() === 'контракт'
+      ? 'за кошти фізичних та/або юридичних осіб'
+      : '';
+  }
+
+  getEducationProgramSpecialty() {
+    return EducationProgramData.find(
+      (d) =>
+        d.idEducationProgram.toLowerCase() ===
+        this.applicant.idEducationProgram.toLowerCase()
     )?.specialty;
   }
 

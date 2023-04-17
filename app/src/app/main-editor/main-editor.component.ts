@@ -121,12 +121,27 @@ export class MainEditorComponent {
     const agenda = this.dataService.getAgendaByKey(agendaKey);
     const heard = this.dataService.getStaffByKey(agendaKey.heard ?? '');
     const speaker = this.dataService.getStaffByKey(agendaKey.speaker ?? '');
-    return this.textService.getDecisionValue(
-      questionId,
-      agenda,
-      heard,
-      speaker
-    );
+    const applicantPoints = agendaKey.applicantPoints?.map((a) => {
+      return {
+        applicant: this.dataService.getApplicantByFullName(a.applicant ?? ''),
+        source: a.source ?? '',
+        resolution: a.resolution ?? '',
+        zavKurs: a.zavKurs ?? '',
+        previousEducationalEstablishment:
+          a.previousEducationalEstablishment ?? '',
+        addition: a.addition ?? '',
+      };
+    });
+    if (agenda) {
+      return this.textService.getDecisionValue(
+        questionId,
+        agenda,
+        heard,
+        speaker,
+        applicantPoints
+      );
+    }
+    return '';
   }
 
   getApplicants(agendaForm: FormGroup) {
@@ -144,8 +159,9 @@ export class MainEditorComponent {
       educationDegree: [agenda?.educationDegree, Validators.required],
       speaker: [agenda?.speaker, Validators.required],
       heard: [agenda?.heard, Validators.required],
+      agendaAddition: [agenda?.agendaAddition, Validators.required],
       applicantPoints: this.createApplicantsArrayControll(
-        agenda?.applicantPoints ?? []
+        agenda?.applicantPoints ?? [{}]
       ),
     });
   }
@@ -159,14 +175,19 @@ export class MainEditorComponent {
 
   createApplicantGroup(applicantPoint?: IApplicantPoint) {
     return this.formBuilder.group({
-      applicant: [applicantPoint?.applicants, Validators.required],
+      applicant: [applicantPoint?.applicant, Validators.required],
       source: [applicantPoint?.source, Validators.required],
       resolution: [applicantPoint?.resolution, Validators.required],
+      zavKurs: [applicantPoint?.zavKurs, Validators.required],
+      previousEducationalEstablishment: [
+        applicantPoint?.previousEducationalEstablishment,
+        Validators.required,
+      ],
+      addition: [applicantPoint?.addition, Validators.required],
     });
   }
 
   getApplicantArrayControll(agendaForm: FormGroup) {
-    console.log(agendaForm.get('applicantPoints'));
     return agendaForm.get('applicantPoints') as FormArray;
   }
 
@@ -191,7 +212,6 @@ export class MainEditorComponent {
   }
 
   onPreviewClick() {
-    console.log(this.form.getRawValue());
     localStorage.setItem(
       'documentData',
       JSON.stringify(this.form.getRawValue())

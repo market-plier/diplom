@@ -60,14 +60,21 @@ export class DataService {
   }
 
   getAgendaByKey(ak?: AgendaCompositeKey) {
-    return this.state.agenda?.find(
-      (a) =>
-        ak?.educationDegree === a.educationDegree &&
-        ak.entryBase === a.entryBase &&
-        ak.formOfEducation === a.formOfEducation &&
-        ak.keyword === a.key &&
-        ak.nationality === a.nationality
+    const agenda = Object.assign(
+      {},
+      this.state.agenda?.find(
+        (a) =>
+          ak?.educationDegree === a.educationDegree &&
+          ak.entryBase === a.entryBase &&
+          ak.formOfEducation === a.formOfEducation &&
+          ak.keyword === a.key &&
+          ak.nationality === a.nationality
+      )
     );
+    if (agenda) {
+      agenda.part3 = ak?.agendaAddition ?? '';
+    }
+    return agenda;
   }
 
   getApplicantsByKey(ak?: AgendaCompositeKey) {
@@ -77,6 +84,10 @@ export class DataService {
         ak?.entryBase === a.getEntryBase() &&
         ak?.nationality === a.getNationality()
     );
+  }
+
+  getApplicantByFullName(name: string) {
+    return this.applicants.find((a) => a.applicant.fullName === name);
   }
 
   updateTemplateData(templateData: TemplateData) {

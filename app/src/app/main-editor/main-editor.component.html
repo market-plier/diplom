@@ -114,6 +114,10 @@
         </mat-card>
         <br />
         <p>Вирішили:</p>
+        <mat-form-field>
+          <mat-label>Додаток</mat-label>
+          <input formControlName="agendaAddition" matInput />
+        </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>Слухали:</mat-label>
           <mat-select formControlName="heard">
@@ -149,7 +153,7 @@
               [formGroup]="$any(applicantForm)"
             >
               <mat-form-field appearance="fill">
-                <mat-label>Здобувачі</mat-label>
+                <mat-label>Здобувач</mat-label>
                 <mat-select formControlName="applicant">
                   <mat-option
                     *ngFor="let applicant of getApplicants($any(agendaForm))"
@@ -171,6 +175,21 @@
                     >{{ staff }}</mat-option
                   >
                 </mat-select>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Додаток</mat-label>
+                <input formControlName="addition" matInput />
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Зав. курс</mat-label>
+                <input formControlName="zavKurs" matInput />
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Попередній заклад освіти</mat-label>
+                <input
+                  formControlName="previousEducationalEstablishment"
+                  matInput
+                />
               </mat-form-field>
               <button
                 mat-icon-button
