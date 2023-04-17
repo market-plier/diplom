@@ -1,7 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
-import { Agenda } from '../api/contracts/agenda';
 import {
   AgendaApiActions,
+  ApplicantDataActions,
   StaffDataActions,
   TemplateDataActions,
 } from './actions';
@@ -24,5 +24,8 @@ export const stateReducer = createReducer(
   }),
   on(StaffDataActions.updateStaffData, (_state, { staff }) => {
     return Object.assign({}, _state, { staff });
+  }),
+  on(ApplicantDataActions.updateApplicantData, (_state, { applicants }) => {
+    return Object.assign({}, _state, { applicants });
   })
 );

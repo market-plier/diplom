@@ -1,31 +1,27 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { TemplateData } from '../api/contracts/templateData';
-import { headerData, people, protocolData } from '../data/test-data';
-import { DataService } from '../services/data.service';
+import { Store } from '@ngrx/store';
+import { first } from 'rxjs';
+import { AgendaCompositeKey, IApplicantPoint } from '../api/contracts/agenda';
 import {
-  AgendaCompositeKey,
   EducationDegree,
   EntryBase,
   FormOfEducation,
   Nationality,
-  formOfEducationRecord,
-  keywords,
 } from '../api/contracts/enums';
-import { MatDialog } from '@angular/material/dialog';
+import { TemplateData } from '../api/contracts/templateData';
 import { PeopleDialogComponent } from '../dialogs/people-dialog/people-dialog.component';
-import { Store } from '@ngrx/store';
-import {
-  selectAgendaKeys,
-  selectAgendasByKeys,
-  selectStaffKeys,
-  selectTemplateData,
-} from '../store/selectors';
-import { first, tap } from 'rxjs';
-import { Agenda } from '../api/contracts/agenda';
+import { DataService } from '../services/data.service';
 import { TextBuilderService } from '../services/text-builder.service';
 import { TemplateDataActions } from '../store/actions';
+import {
+  selectAgendaKeys,
+  selectStaffKeys,
+  selectStaffResolutions,
+  selectTemplateData,
+} from '../store/selectors';
 
 @Component({
   selector: 'app-main-editor',
@@ -35,6 +31,10 @@ import { TemplateDataActions } from '../store/actions';
 export class MainEditorComponent {
   @Input() form: FormGroup;
   @Output() preview = new EventEmitter<TemplateData>();
+
+  keys$ = this.store.select(selectAgendaKeys);
+  staffKeys$ = this.store.select(selectStaffKeys);
+  staffResolutions$ = this.store.select(selectStaffResolutions);
 
   constructor(
     private formBuilder: FormBuilder,
@@ -71,9 +71,6 @@ export class MainEditorComponent {
       );
     });
   }
-
-  keys$ = this.store.select(selectAgendaKeys);
-  staffKeys$ = this.store.select(selectStaffKeys);
 
   get people() {
     return this.dataService.allPeople.map((p) => p.fullName);
@@ -124,12 +121,33 @@ export class MainEditorComponent {
     const agenda = this.dataService.getAgendaByKey(agendaKey);
     const heard = this.dataService.getStaffByKey(agendaKey.heard ?? '');
     const speaker = this.dataService.getStaffByKey(agendaKey.speaker ?? '');
-    return this.textService.getDecisionValue(
-      questionId,
-      agenda,
-      heard,
-      speaker
-    );
+    const applicantPoints = agendaKey.applicantPoints?.map((a) => {
+      return {
+        applicant: this.dataService.getApplicantByFullName(a.applicant ?? ''),
+        source: a.source ?? '',
+        resolution: a.resolution ?? '',
+        zavKurs: a.zavKurs ?? '',
+        previousEducationalEstablishment:
+          a.previousEducationalEstablishment ?? '',
+        addition: a.addition ?? '',
+      };
+    });
+    if (agenda) {
+      return this.textService.getDecisionValue(
+        questionId,
+        agenda,
+        heard,
+        speaker,
+        applicantPoints
+      );
+    }
+    return '';
+  }
+
+  getApplicants(agendaForm: FormGroup) {
+    const agendaKey = agendaForm.value as AgendaCompositeKey;
+    const applicants = this.dataService.getApplicantsByKey(agendaKey);
+    return applicants;
   }
 
   createAgendaGroup(agenda?: AgendaCompositeKey) {
@@ -141,7 +159,46 @@ export class MainEditorComponent {
       educationDegree: [agenda?.educationDegree, Validators.required],
       speaker: [agenda?.speaker, Validators.required],
       heard: [agenda?.heard, Validators.required],
+      agendaAddition: [agenda?.agendaAddition, Validators.required],
+      applicantPoints: this.createApplicantsArrayControll(
+        agenda?.applicantPoints ?? [{}]
+      ),
     });
+  }
+
+  createApplicantsArrayControll(applicants: IApplicantPoint[] = []) {
+    return this.formBuilder.array(
+      applicants.map((a) => this.createApplicantGroup(a)),
+      Validators.required
+    );
+  }
+
+  createApplicantGroup(applicantPoint?: IApplicantPoint) {
+    return this.formBuilder.group({
+      applicant: [applicantPoint?.applicant, Validators.required],
+      source: [applicantPoint?.source, Validators.required],
+      resolution: [applicantPoint?.resolution, Validators.required],
+      zavKurs: [applicantPoint?.zavKurs, Validators.required],
+      previousEducationalEstablishment: [
+        applicantPoint?.previousEducationalEstablishment,
+        Validators.required,
+      ],
+      addition: [applicantPoint?.addition, Validators.required],
+    });
+  }
+
+  getApplicantArrayControll(agendaForm: FormGroup) {
+    return agendaForm.get('applicantPoints') as FormArray;
+  }
+
+  addApplicantPoint(agendaForm: FormGroup, applicantPoint?: IApplicantPoint) {
+    const applicantControll = this.createApplicantGroup(applicantPoint);
+
+    this.getApplicantArrayControll(agendaForm).push(applicantControll);
+  }
+
+  deleteApplicantPoint(agendaForm: FormGroup, agendaIndex: number) {
+    this.getApplicantArrayControll(agendaForm).removeAt(agendaIndex);
   }
 
   addAgendaPoint(agendaKey?: AgendaCompositeKey) {
@@ -155,7 +212,6 @@ export class MainEditorComponent {
   }
 
   onPreviewClick() {
-    console.log(this.form.getRawValue());
     localStorage.setItem(
       'documentData',
       JSON.stringify(this.form.getRawValue())

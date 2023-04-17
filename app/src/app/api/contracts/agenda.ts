@@ -1,3 +1,4 @@
+import { _agendaData } from 'src/app/data/agenda-data-map';
 import {
   EducationDegreeType,
   EntryBaseType,
@@ -19,3 +20,26 @@ export interface Agenda {
   educationDegree: EducationDegreeType;
   formOfEducation: FormOfEducationType;
 }
+
+export interface AgendaCompositeKey {
+  keyword?: string;
+  nationality?: NationalityType;
+  entryBase?: EntryBaseType;
+  agendaAddition?: string;
+  educationDegree?: EducationDegreeType;
+  formOfEducation?: FormOfEducationType;
+  speaker?: string;
+  heard?: string;
+  applicantPoints?: IApplicantPoint[];
+}
+
+export interface IApplicantPoint {
+  applicant?: string;
+  source?: string;
+  resolution?: string;
+  zavKurs?: string;
+  previousEducationalEstablishment?: string;
+  addition?: string;
+}
+
+export const keywords = [...new Set(_agendaData.map((pynkt) => pynkt.key))];

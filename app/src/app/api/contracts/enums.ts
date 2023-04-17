@@ -1,5 +1,3 @@
-import { _agendaData } from 'src/app/data/agenda-data-map';
-
 export enum Nationality {
   all = 'Усі',
   ukr = 'УКР',
@@ -118,14 +116,32 @@ export const educationDegreeRecord: Record<
   [EducationDegree.all]: 'Усі',
 };
 
-export interface AgendaCompositeKey {
-  keyword?: string;
-  nationality?: NationalityType;
-  entryBase?: EntryBaseType;
-  educationDegree?: EducationDegreeType;
-  formOfEducation?: FormOfEducationType;
-  speaker?: string;
-  heard?: string;
+export interface IGenderSelect {
+  stud: string;
+  ogo_u: string;
+  iy_a: string;
+  av_ala: string;
+  asp: string;
 }
 
-export const keywords = [...new Set(_agendaData.map((pynkt) => pynkt.key))];
+export enum Gender {
+  male = 'Чоловіча',
+  female = 'Жіноча',
+}
+
+export const GenderSelectMap: Record<Gender, IGenderSelect> = {
+  [Gender.male]: {
+    stud: 'студента',
+    ogo_u: 'ого',
+    iy_a: 'ий',
+    av_ala: 'ав',
+    asp: 'аспіранта',
+  },
+  [Gender.female]: {
+    stud: 'студентку',
+    ogo_u: 'у',
+    iy_a: 'а',
+    av_ala: 'ала',
+    asp: 'аспірантку',
+  },
+};

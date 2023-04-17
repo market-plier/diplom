@@ -1,7 +1,7 @@
-import { createSelector, createFeatureSelector } from '@ngrx/store';
-import { State } from './state';
-import { AgendaCompositeKey } from '../api/contracts/enums';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { Agenda } from '../api/contracts/agenda';
+import { Applicant } from '../api/contracts/applicant';
+import { State } from './state';
 
 export const selectState = createFeatureSelector<State>('state');
 
@@ -16,6 +16,20 @@ export const selectTemplateData = createSelector(selectState, (state) => {
 export const selectStaffData = createSelector(selectState, (state) => {
   return state.staff;
 });
+
+export const selectApplicants = createSelector(selectState, (state) => {
+  return state.applicants.map((ap) => new Applicant(ap));
+});
+
+export const secelctAvailableApplicants = createSelector(
+  selectApplicants,
+  selectTemplateData,
+  (applicants, templateData) => {
+    return applicants.filter(
+      (a) => a.getEducationDegree() === templateData.agendaKeys
+    );
+  }
+);
 
 export const selectAgendasByKeys = createSelector(
   selectAgendas,
@@ -45,3 +59,10 @@ export const selectAgendaKeys = createSelector(selectAgendas, (agenda) => {
 export const selectStaffKeys = createSelector(selectStaffData, (staff) => {
   return [...new Set(staff.map((a) => a.subdivision))];
 });
+
+export const selectStaffResolutions = createSelector(
+  selectStaffData,
+  (staff) => {
+    return [...new Set(staff.map((a) => a.position_r))];
+  }
+);

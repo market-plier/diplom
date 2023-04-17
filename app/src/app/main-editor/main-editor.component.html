@@ -114,6 +114,10 @@
         </mat-card>
         <br />
         <p>Вирішили:</p>
+        <mat-form-field>
+          <mat-label>Додаток</mat-label>
+          <input formControlName="agendaAddition" matInput />
+        </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>Слухали:</mat-label>
           <mat-select formControlName="heard">
@@ -134,6 +138,79 @@
             >
           </mat-select>
         </mat-form-field>
+        <p>Здобувачі:</p>
+        <ng-container formArrayName="applicantPoints">
+          <ng-container
+            *ngFor="
+              let applicantForm of getApplicantArrayControll($any(agendaForm))
+                .controls;
+              let i = index
+            "
+          >
+            <div
+              style="width: 100%"
+              class="point"
+              [formGroup]="$any(applicantForm)"
+            >
+              <mat-form-field appearance="fill">
+                <mat-label>Здобувач</mat-label>
+                <mat-select formControlName="applicant">
+                  <mat-option
+                    *ngFor="let applicant of getApplicants($any(agendaForm))"
+                    [value]="applicant.applicant.fullName"
+                    >{{ applicant.applicant.fullName }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Джерело фін</mat-label>
+                <input formControlName="source" matInput />
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Резолюція</mat-label>
+                <mat-select formControlName="resolution">
+                  <mat-option
+                    *ngFor="let staff of staffResolutions$ | async"
+                    [value]="staff"
+                    >{{ staff }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Додаток</mat-label>
+                <input formControlName="addition" matInput />
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Зав. курс</mat-label>
+                <input formControlName="zavKurs" matInput />
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Попередній заклад освіти</mat-label>
+                <input
+                  formControlName="previousEducationalEstablishment"
+                  matInput
+                />
+              </mat-form-field>
+              <button
+                mat-icon-button
+                matSuffix
+                [disabled]="
+                  getApplicantArrayControll($any(agendaForm)).length === 1
+                "
+                (click)="deleteApplicantPoint($any(agendaForm), i)"
+              >
+                <mat-icon>delete_forever</mat-icon>
+              </button>
+            </div>
+          </ng-container>
+        </ng-container>
+        <button
+          mat-raised-button
+          color="secondary"
+          (click)="addApplicantPoint($any(agendaForm))"
+        >
+          Додати здобувача
+        </button>
         <mat-card class="agenda">
           <mat-card-content>
             <span>{{

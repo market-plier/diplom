@@ -1,13 +1,11 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { logoUrlData } from 'src/assets/images';
-import { TemplateData } from '../api/contracts/templateData';
+import { AgendaCompositeKey } from '../api/contracts/agenda';
 import { DataService } from '../services/data.service';
 import { PdfGeneratorService } from '../services/pdf-generator.service';
-import { Store } from '@ngrx/store';
-import { selectAgendasByKeys, selectTemplateData } from '../store/selectors';
 import { TextBuilderService } from '../services/text-builder.service';
-import { AgendaCompositeKey } from '../api/contracts/enums';
-import { tap } from 'rxjs';
+import { selectTemplateData } from '../store/selectors';
 
 @Component({
   selector: 'app-preview',
@@ -17,9 +15,7 @@ import { tap } from 'rxjs';
 export class PreviewComponent {
   @ViewChild('document') document!: ElementRef;
   logo = logoUrlData;
-  templateData$ = this.store
-    .select(selectTemplateData)
-    .pipe(tap((x) => console.log(x)));
+  templateData$ = this.store.select(selectTemplateData);
   constructor(
     private pdfService: PdfGeneratorService,
     public readonly dataService: DataService,
@@ -36,15 +32,30 @@ export class PreviewComponent {
     return this.textService.getAgendaValue(questionId, agenda);
   }
 
-  getDecisionValue(agendaKey: AgendaCompositeKey, questionId: number) {
+  getDecisionValue(agendaKey: AgendaCompositeKey, questionId: number): string {
     const agenda = this.dataService.getAgendaByKey(agendaKey);
     const heard = this.dataService.getStaffByKey(agendaKey.heard ?? '');
     const speaker = this.dataService.getStaffByKey(agendaKey.speaker ?? '');
-    return this.textService.getDecisionValue(
-      questionId,
-      agenda,
-      heard,
-      speaker
-    );
+    const applicantPoints = agendaKey.applicantPoints?.map((a) => {
+      return {
+        applicant: this.dataService.getApplicantByFullName(a.applicant ?? ''),
+        source: a.source ?? '',
+        resolution: a.resolution ?? '',
+        zavKurs: a.zavKurs ?? '',
+        previousEducationalEstablishment:
+          a.previousEducationalEstablishment ?? '',
+        addition: a.addition ?? '',
+      };
+    });
+    if (agenda) {
+      return this.textService.getDecisionValue(
+        questionId,
+        agenda,
+        heard,
+        speaker,
+        applicantPoints
+      );
+    }
+    return '';
   }
 }

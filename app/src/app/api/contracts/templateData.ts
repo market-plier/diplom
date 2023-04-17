@@ -1,4 +1,4 @@
-import { AgendaCompositeKey } from 'src/app/api/contracts/enums';
+import { AgendaCompositeKey } from './agenda';
 
 export interface TemplateData {
   header?: string;
