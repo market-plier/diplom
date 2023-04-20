@@ -31,7 +31,7 @@ export class TextBuilderService {
       (q) => q.id === questionId
     )?.value;
 
-    if (agendaData?.key === 'Різне') {
+    if (agendaData?.keyword === 'Різне') {
       return `${questionNumberValue} - ${agendaData.decisionType}`;
     }
 
@@ -39,7 +39,8 @@ export class TextBuilderService {
       questionNumberValue
         ? questionNumberValue.concat(
             ` слухали ${
-              heard?.position_r.concat(' ', heard?.fullName_r) ?? 'Не знайдено'
+              heard?.positionGenitive.concat(' ', heard?.fullNameGenitive) ??
+              'Не знайдено'
             } \n`
           )
         : ''
@@ -48,28 +49,29 @@ export class TextBuilderService {
       speaker?.position.concat(' ', speaker.fullName) ?? 'Не знайдено'
     }\n`;
 
-    const applicantText = applicantPoints?.map((ap) => {
-      if (ap.applicant) {
-        return (
-          this.getApplicantText(
-            agendaData,
-            ap.applicant,
-            ap.source,
-            ap.resolution,
-            ap.addition,
-            ap.zavKurs,
-            ap.previousEducationalEstablishment
-          ) + '\n'
-        );
-      } else {
-        return '';
-      }
-    });
+    // const applicantText = applicantPoints?.map((ap) => {
+    //   if (ap.applicant) {
+    //     return (
+    //       this.getApplicantText(
+    //         agendaData,
+    //         ap.applicant,
+    //         ap.source,
+    //         ap.resolution,
+    //         ap.addition,
+    //         ap.zavKurs,
+    //         ap.previousEducationalEstablishment
+    //       ) + '\n'
+    //     );
+    //   } else {
+    //     return '';
+    //   }
+    // });
 
     return `${heardValue}${speakerValue}${
       this.getDecisionText(agendaData) ?? 'Не знайдено'
-    }\n${applicantText}`;
+    }`;
   }
+
   getDecisionText(agendaData: Agenda) {
     return `${agendaData.decisionType}${agendaData.part2}${agendaData.part3}`;
   }
@@ -87,13 +89,13 @@ export class TextBuilderService {
     zavKurs: string,
     previousEducationalEstablishment: string
   ): string {
-    return agenda.key === 'Зміна фінансування' ||
-      agenda.key == 'Зміна фінансування кк4' ||
-      agenda.key == 'Зміна фінансування кк5' ||
-      agenda.key == 'Зміна фінансування кк6' ||
-      agenda.key ==
+    return agenda.keyword === 'Зміна фінансування' ||
+      agenda.keyword == 'Зміна фінансування кк4' ||
+      agenda.keyword == 'Зміна фінансування кк5' ||
+      agenda.keyword == 'Зміна фінансування кк6' ||
+      agenda.keyword ==
         'Зміна фінансування серед зарахованих на контракт за рейтингом' ||
-      agenda.key == 'Зміна фінансування серед пільгових категорій'
+      agenda.keyword == 'Зміна фінансування серед пільгових категорій'
       ? this.getTextPart5(
           agenda,
           applicant,
@@ -103,7 +105,7 @@ export class TextBuilderService {
           zavKurs,
           previousEducationalEstablishment
         )
-      : agenda.key == 'Переведення на освітню програму'
+      : agenda.keyword == 'Переведення на освітню програму'
       ? this.getTextPart4(
           agenda,
           applicant,
@@ -113,9 +115,9 @@ export class TextBuilderService {
           zavKurs,
           previousEducationalEstablishment
         )
-      : agenda.key == 'Відраховані за власним бажанням' ||
-        agenda.key == 'Відраховані, що без оплати' ||
-        agenda.key == 'Відраховані, що не уклали договір про навчання'
+      : agenda.keyword == 'Відраховані за власним бажанням' ||
+        agenda.keyword == 'Відраховані, що без оплати' ||
+        agenda.keyword == 'Відраховані, що не уклали договір про навчання'
       ? this.getTextPart3(
           agenda,
           applicant,
@@ -125,10 +127,10 @@ export class TextBuilderService {
           zavKurs,
           previousEducationalEstablishment
         )
-      : agenda.key == 'Поновлені з нашого ЗВО' ||
-        agenda.key == 'Поновлені з іншого ЗВО' ||
-        agenda.key == 'Поновлені з іншого ЗВО НУ' ||
-        agenda.key == 'Поновлені з нашого ЗВО НУ'
+      : agenda.keyword == 'Поновлені з нашого ЗВО' ||
+        agenda.keyword == 'Поновлені з іншого ЗВО' ||
+        agenda.keyword == 'Поновлені з іншого ЗВО НУ' ||
+        agenda.keyword == 'Поновлені з нашого ЗВО НУ'
       ? this.getTextPart2(
           agenda,
           applicant,
@@ -158,19 +160,20 @@ export class TextBuilderService {
     zavKurs: string,
     previousEducationalEstablishment: string
   ): string {
-    return agenda.key + applicant.getNationality() ===
+    return agenda.keyword + applicant.getNationality() ===
       'Зараховані контрактІН' ||
-      agenda.key + applicant.getNationality() == 'Допуск до конкурсуІН' ||
-      agenda.key + applicant.getNationality() == 'Допуск до конкурсуУКР' ||
-      agenda.key == 'Поновлені для завершення атестації'
-      ? agenda.key + applicant.getNationality() == 'Зараховані контрактІН'
+      agenda.keyword + applicant.getNationality() == 'Допуск до конкурсуІН' ||
+      agenda.keyword + applicant.getNationality() == 'Допуск до конкурсуУКР' ||
+      agenda.keyword == 'Поновлені для завершення атестації'
+      ? agenda.keyword + applicant.getNationality() == 'Зараховані контрактІН'
         ? addition +
           ' ' +
           applicant.applicant.fullName +
           ' до ' +
           applicant.getFacultyFullNameR()
-        : agenda.key + applicant.getNationality() == 'Допуск до конкурсуІН' ||
-          agenda.key + applicant.getNationality() == 'Допуск до конкурсуУКР'
+        : agenda.keyword + applicant.getNationality() ==
+            'Допуск до конкурсуІН' ||
+          agenda.keyword + applicant.getNationality() == 'Допуск до конкурсуУКР'
         ? addition +
           ' ' +
           applicant.applicant.fullName +
@@ -221,10 +224,10 @@ export class TextBuilderService {
     zavKurs: string,
     previousEducationalEstablishment: string
   ): string {
-    return agenda.key === 'Поновлені з нашого ЗВО' ||
-      agenda.key == 'Поновлені з іншого ЗВО' ||
-      agenda.key == 'Поновлені з іншого ЗВО НУ' ||
-      agenda.key == 'Поновлені з нашого ЗВО НУ'
+    return agenda.keyword === 'Поновлені з нашого ЗВО' ||
+      agenda.keyword == 'Поновлені з іншого ЗВО' ||
+      agenda.keyword == 'Поновлені з іншого ЗВО НУ' ||
+      agenda.keyword == 'Поновлені з нашого ЗВО НУ'
       ? applicant.applicant.fullName +
           ' на ' +
           applicant.applicant.fullName +
@@ -273,9 +276,9 @@ export class TextBuilderService {
     zavKurs: string,
     previousEducationalEstablishment: string
   ): string {
-    return agenda.key === 'Відраховані за власним бажанням' ||
-      agenda.key == 'Відраховані, що без оплати' ||
-      agenda.key == 'Відраховані, що не уклали договір про навчання'
+    return agenda.keyword === 'Відраховані за власним бажанням' ||
+      agenda.keyword == 'Відраховані, що без оплати' ||
+      agenda.keyword == 'Відраховані, що не уклали договір про навчання'
       ? (addition == '' ? '' : addition + ' ') +
           applicant.applicant.fullName +
           (+applicant.applicant.idCard < 1000
@@ -317,9 +320,9 @@ export class TextBuilderService {
             : ' ') +
           (applicant.getEducationDegree() == 'Phd'
             ? 'освітня програма «' + applicant.getEducationProgramName()
-            : agenda.key == 'Відраховані за власним бажанням' ||
-              agenda.key == 'Відраховані, що без оплати' ||
-              agenda.key == 'Відраховані, що не уклали договір про навчання'
+            : agenda.keyword == 'Відраховані за власним бажанням' ||
+              agenda.keyword == 'Відраховані, що без оплати' ||
+              agenda.keyword == 'Відраховані, що не уклали договір про навчання'
             ? applicant.applicant.idEducationProgram.length == 0
               ? 'освітні програми «' + applicant.getKpOsvintiProgrami() + '»'
               : ' освітня програма «' +
@@ -336,9 +339,10 @@ export class TextBuilderService {
               (source == ''
                 ? '.'
                 : '. ' +
-                  (agenda.key == 'Відраховані, що без оплати' ||
-                  agenda.key == 'Відраховані, що без оплати' ||
-                  agenda.key == 'Відраховані, що не уклали договір про навчання'
+                  (agenda.keyword == 'Відраховані, що без оплати' ||
+                  agenda.keyword == 'Відраховані, що без оплати' ||
+                  agenda.keyword ==
+                    'Відраховані, що не уклали договір про навчання'
                     ? 'Підстава: ' +
                       source +
                       ', резолюція ' +
@@ -366,7 +370,7 @@ export class TextBuilderService {
     zavKurs: string,
     previousEducationalEstablishment: string
   ): string {
-    return agenda.key == 'Переведення на освітню програму'
+    return agenda.keyword == 'Переведення на освітню програму'
       ? (addition == '' ? '' : addition + ' ') +
           applicant.applicant.fullName +
           ', IDe - ' +
@@ -437,14 +441,14 @@ export class TextBuilderService {
     zavKurs: string,
     previousEducationalEstablishment: string
   ): string {
-    return agenda.key === 'Зміна фінансування' ||
-      agenda.key == 'Зміна фінансування кк4' ||
-      agenda.key == 'Зміна фінансування кк5' ||
-      agenda.key == 'Зміна фінансування кк6' ||
-      agenda.key == 'Зміна фінансування кк7' ||
-      agenda.key ==
+    return agenda.keyword === 'Зміна фінансування' ||
+      agenda.keyword == 'Зміна фінансування кк4' ||
+      agenda.keyword == 'Зміна фінансування кк5' ||
+      agenda.keyword == 'Зміна фінансування кк6' ||
+      agenda.keyword == 'Зміна фінансування кк7' ||
+      agenda.keyword ==
         'Зміна фінансування серед зарахованих на контракт за рейтингом' ||
-      agenda.key == 'Зміна фінансування серед пільгових категорій'
+      agenda.keyword == 'Зміна фінансування серед пільгових категорій'
       ? (addition == '' ? '' : addition + ' ') +
           applicant.applicant.fullName +
           ', IDe - ' +
@@ -457,24 +461,24 @@ export class TextBuilderService {
           applicant.applicant.course +
           '-го курсу, ' +
           applicant.getFullEDucationForm() +
-          (agenda.key == 'Зміна фінансування' ||
-          agenda.key == 'Зміна фінансування кк4' ||
-          agenda.key == 'Зміна фінансування кк5' ||
-          agenda.key == 'Зміна фінансування кк6' ||
-          agenda.key == 'Зміна фінансування кк7' ||
-          agenda.key ==
+          (agenda.keyword == 'Зміна фінансування' ||
+          agenda.keyword == 'Зміна фінансування кк4' ||
+          agenda.keyword == 'Зміна фінансування кк5' ||
+          agenda.keyword == 'Зміна фінансування кк6' ||
+          agenda.keyword == 'Зміна фінансування кк7' ||
+          agenda.keyword ==
             'Зміна фінансування серед зарахованих на контракт за рейтингом' ||
-          agenda.key == 'Зміна фінансування серед пільгових категорій'
+          agenda.keyword == 'Зміна фінансування серед пільгових категорій'
             ? ''
             : ', ') +
-          (agenda.key == 'Зміна фінансування' ||
-          agenda.key == 'Зміна фінансування кк4' ||
-          agenda.key == 'Зміна фінансування кк5' ||
-          agenda.key == 'Зміна фінансування кк6' ||
-          agenda.key == 'Зміна фінансування кк7' ||
-          agenda.key ==
+          (agenda.keyword == 'Зміна фінансування' ||
+          agenda.keyword == 'Зміна фінансування кк4' ||
+          agenda.keyword == 'Зміна фінансування кк5' ||
+          agenda.keyword == 'Зміна фінансування кк6' ||
+          agenda.keyword == 'Зміна фінансування кк7' ||
+          agenda.keyword ==
             'Зміна фінансування серед зарахованих на контракт за рейтингом' ||
-          agenda.key == 'Зміна фінансування серед пільгових категорій'
+          agenda.keyword == 'Зміна фінансування серед пільгових категорій'
             ? ''
             : applicant.getFullSourceOfFunding()) +
           ', ' +
@@ -506,14 +510,14 @@ export class TextBuilderService {
             : ' ') +
           (applicant.getEducationDegree() == 'Phd'
             ? 'освітня програма «' + applicant.getEducationProgramName() + '»'
-            : agenda.key == 'Зміна фінансування' ||
-              agenda.key == 'Зміна фінансування кк4' ||
-              agenda.key == 'Зміна фінансування кк5' ||
-              agenda.key == 'Зміна фінансування кк6' ||
-              agenda.key == 'Зміна фінансування кк7' ||
-              agenda.key ==
+            : agenda.keyword == 'Зміна фінансування' ||
+              agenda.keyword == 'Зміна фінансування кк4' ||
+              agenda.keyword == 'Зміна фінансування кк5' ||
+              agenda.keyword == 'Зміна фінансування кк6' ||
+              agenda.keyword == 'Зміна фінансування кк7' ||
+              agenda.keyword ==
                 'Зміна фінансування серед зарахованих на контракт за рейтингом' ||
-              agenda.key == 'Зміна фінансування серед пільгових категорій'
+              agenda.keyword == 'Зміна фінансування серед пільгових категорій'
             ? applicant.applicant.idEducationProgram.length == 0
               ? 'з подальшим розподілом на одну з освітніх програм «' +
                 applicant.getKpOsvintiProgrami() +
@@ -531,11 +535,11 @@ export class TextBuilderService {
           (source == ''
             ? '.'
             : '. ' +
-              +(agenda.key == 'Зміна фінансування' ||
-              agenda.key == 'Зміна фінансування кк4' ||
-              agenda.key == 'Зміна фінансування кк5' ||
-              agenda.key == 'Зміна фінансування кк6' ||
-              agenda.key == 'Зміна фінансування серед пільгових категорій'
+              +(agenda.keyword == 'Зміна фінансування' ||
+              agenda.keyword == 'Зміна фінансування кк4' ||
+              agenda.keyword == 'Зміна фінансування кк5' ||
+              agenda.keyword == 'Зміна фінансування кк6' ||
+              agenda.keyword == 'Зміна фінансування серед пільгових категорій'
                 ? 'Підстава: ' + source + '.'
                 : 'Підстава: заява ст.' +
                   applicant.applicant.fullName +
@@ -549,6 +553,7 @@ export class TextBuilderService {
   }
 
   getResolutionStaffNameRByResolution(resolution: string) {
-    return staffData.find((s) => s.position_r === resolution)?.fullName_r;
+    return staffData.find((s) => s.positionGenitive === resolution)
+      ?.fullNameGenitive;
   }
 }

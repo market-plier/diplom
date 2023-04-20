@@ -1,7 +1,11 @@
 export interface IEducationProgram {
+  codeZo: string;
+  zoName: string;
   idEducationProgram: string;
-  fullName: string;
+  educationProgramName: string;
   educationDegree: string;
   specialty: string;
   specialization: string;
+  idCertificate: string;
+  applicantsCount: string;
 }

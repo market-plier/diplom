@@ -1,9 +1,7 @@
-import { EntryBaseType } from './enums';
-
 export interface IEntryBase {
   entryBase: string;
   entryBaseFull: string;
-  enrtyBaseFull_r: string;
+  enrtyBaseFullGenitive: string;
   stup: string;
 }
 

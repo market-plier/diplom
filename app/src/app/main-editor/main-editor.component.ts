@@ -11,7 +11,7 @@ import {
   FormOfEducation,
   Nationality,
 } from '../api/contracts/enums';
-import { TemplateData } from '../api/contracts/templateData';
+import { TemplateData } from '../api/contracts/template-data';
 import { PeopleDialogComponent } from '../dialogs/people-dialog/people-dialog.component';
 import { DataService } from '../services/data.service';
 import { TextBuilderService } from '../services/text-builder.service';

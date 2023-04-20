@@ -1,8 +1,8 @@
-import { EducationProgramData } from 'src/app/data/education-program-data';
 import { EducationDegreeData } from 'src/app/data/educationDegree-data';
 import { EntryBaseData } from 'src/app/data/entryBase-data';
 import { FacultyData } from 'src/app/data/faculty-data';
 import { Kp } from 'src/app/data/kp';
+import { OsvitnaProgrammaData } from 'src/app/data/osvitnya_pogramma-data';
 import { staffData } from 'src/app/data/staff-data';
 import { ZayaviInshiData } from 'src/app/data/zayavi-Inshi-data';
 export interface IApplicant {
@@ -77,7 +77,7 @@ export class Applicant {
       (e) =>
         e.educationDegreeFull.toLowerCase() ===
         this.applicant.educationDegreeFull.toLowerCase()
-    )?.educationDegreeText_r;
+    )?.educationDegreeTextGenititve;
   }
 
   getEntryBase() {
@@ -101,7 +101,7 @@ export class Applicant {
       (e) =>
         e.entryBaseFull.toLowerCase() ===
         this.applicant.entryBaseFull.toLowerCase()
-    )?.enrtyBaseFull_r;
+    )?.enrtyBaseFullGenitive;
   }
 
   getFacultyFullName2022() {
@@ -129,21 +129,21 @@ export class Applicant {
     return FacultyData.find(
       (f) =>
         f.fullName.toLowerCase() === this.applicant.facultyFull.toLowerCase()
-    )?.fullName_r;
+    )?.fullNameGenitive;
   }
 
   getPKFaculty() {
     return staffData.find(
       (s) => s.subdivision.toLowerCase() === this.getFaculty()?.toLowerCase()
-    )?.position_r;
+    )?.positionGenitive;
   }
 
   getEducationProgramName() {
-    return EducationProgramData.find(
+    return OsvitnaProgrammaData.find(
       (d) =>
         d.idEducationProgram.toLowerCase() ===
         this.applicant.idEducationProgram.toLowerCase()
-    )?.fullName;
+    )?.educationProgramName;
   }
 
   getFinFull() {
@@ -155,7 +155,7 @@ export class Applicant {
   }
 
   getEducationProgramSpecialty() {
-    return EducationProgramData.find(
+    return OsvitnaProgrammaData.find(
       (d) =>
         d.idEducationProgram.toLowerCase() ===
         this.applicant.idEducationProgram.toLowerCase()

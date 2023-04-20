@@ -38,11 +38,11 @@ export const selectAgendasByKeys = createSelector(
     return agendas.reduce((acc, curr) => {
       const hasKey = templateData.agendaKeys?.some(
         (ak) =>
-          ak.educationDegree === curr.educationDegree &&
-          ak.entryBase === curr.entryBase &&
-          ak.formOfEducation === curr.formOfEducation &&
-          ak.keyword === curr.key &&
-          ak.nationality === curr.nationality
+          ak.educationDegree === curr.keyEducationDegree &&
+          ak.entryBase === curr.keyEntryBase &&
+          ak.formOfEducation === curr.keyFormOfEducation &&
+          ak.keyword === curr.keyword &&
+          ak.nationality === curr.keyNationality
       );
       if (hasKey) {
         acc.push(curr);
@@ -53,7 +53,7 @@ export const selectAgendasByKeys = createSelector(
 );
 
 export const selectAgendaKeys = createSelector(selectAgendas, (agenda) => {
-  return [...new Set(agenda.map((a) => a.key))];
+  return [...new Set(agenda.map((a) => a.keyword))];
 });
 
 export const selectStaffKeys = createSelector(selectStaffData, (staff) => {
@@ -63,6 +63,6 @@ export const selectStaffKeys = createSelector(selectStaffData, (staff) => {
 export const selectStaffResolutions = createSelector(
   selectStaffData,
   (staff) => {
-    return [...new Set(staff.map((a) => a.position_r))];
+    return [...new Set(staff.map((a) => a.positionGenitive))];
   }
 );

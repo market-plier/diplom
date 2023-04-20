@@ -8,17 +8,17 @@ import {
 
 export interface Agenda {
   id: string;
-  key: string;
+  keyword: string;
   agendaType: string;
   decisionType: string;
   part1: string;
   part2: string;
   part3: string;
   part4: string;
-  nationality: NationalityType;
-  entryBase: EntryBaseType;
-  educationDegree: EducationDegreeType;
-  formOfEducation: FormOfEducationType;
+  keyNationality: NationalityType;
+  keyEntryBase: EntryBaseType;
+  keyEducationDegree: EducationDegreeType;
+  keyFormOfEducation: FormOfEducationType;
 }
 
 export interface AgendaCompositeKey {
@@ -42,4 +42,4 @@ export interface IApplicantPoint {
   addition?: string;
 }
 
-export const keywords = [...new Set(_agendaData.map((pynkt) => pynkt.key))];
+export const keywords = [...new Set(_agendaData.map((pynkt) => pynkt.keyword))];

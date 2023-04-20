@@ -1,7 +1,7 @@
 export interface Staff {
   subdivision: string;
   position: string;
-  position_r: string;
+  positionGenitive: string;
   fullName: string;
-  fullName_r: string;
+  fullNameGenitive: string;
 }

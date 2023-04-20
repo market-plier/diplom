@@ -1,6 +1,6 @@
 export interface IFaculty {
   faculty: string;
-  fullName_r: string;
+  fullNameGenitive: string;
   fullForm: string;
   position: string;
   form: string;

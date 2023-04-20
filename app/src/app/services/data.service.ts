@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 import { AgendaCompositeKey } from '../api/contracts/agenda';
 import { Applicant, IApplicant } from '../api/contracts/applicant';
 import { Staff } from '../api/contracts/staff';
-import { TemplateData } from '../api/contracts/templateData';
+import { TemplateData } from '../api/contracts/template-data';
 import { _agendaData } from '../data/agenda-data-map';
 import { ApplicantsData } from '../data/applicants-data';
 import { staffData } from '../data/staff-data';
@@ -64,11 +64,11 @@ export class DataService {
       {},
       this.state.agenda?.find(
         (a) =>
-          ak?.educationDegree === a.educationDegree &&
-          ak.entryBase === a.entryBase &&
-          ak.formOfEducation === a.formOfEducation &&
-          ak.keyword === a.key &&
-          ak.nationality === a.nationality
+          ak?.educationDegree === a.keyEducationDegree &&
+          ak.entryBase === a.keyEntryBase &&
+          ak.formOfEducation === a.keyFormOfEducation &&
+          ak.keyword === a.keyword &&
+          ak.nationality === a.keyNationality
       )
     );
     if (agenda) {

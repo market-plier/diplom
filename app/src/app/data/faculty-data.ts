@@ -3,7 +3,7 @@ import { IFaculty } from '../api/contracts/faculty';
 export const FacultyData: IFaculty[] = [
   {
     faculty: 'ГФ',
-    fullName_r: 'гуманітарного факультету',
+    fullNameGenitive: 'гуманітарного факультету',
     fullForm: 'денної форми навчання',
     position: 'декана',
     form: 'Денна',
@@ -13,7 +13,7 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'ІБЕІТ',
-    fullName_r:
+    fullNameGenitive:
       'Навчально-наукового інституту бізнесу економіки та інформаційних технологій',
     fullForm: 'денної форми навчання',
     position: 'директора',
@@ -25,7 +25,8 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'ІДЗО',
-    fullName_r: 'Навчально-наукового інституту дистанційної і заочної освіти',
+    fullNameGenitive:
+      'Навчально-наукового інституту дистанційної і заочної освіти',
     fullForm: 'заочної форми навчання',
     position: 'директора',
     form: 'Заочна',
@@ -35,7 +36,7 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'ІЕЕ',
-    fullName_r:
+    fullNameGenitive:
       'Навчально-наукового інституту електротехніки та електромеханіки',
     fullForm: 'денної форми навчання',
     position: 'директора',
@@ -47,7 +48,7 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'ІЕКСУ',
-    fullName_r:
+    fullNameGenitive:
       "Навчально-наукового інституту енергетики і комп'ютерно-інтегрованих систем управління",
     fullForm: 'денної форми навчання',
     position: 'директора',
@@ -59,7 +60,7 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'ІІБРТ',
-    fullName_r:
+    fullNameGenitive:
       'Навчально-наукового інституту інформаційної безпеки, радіоелектроніки та телекомунікацій',
     fullForm: 'денної форми навчання',
     position: 'директора',
@@ -71,7 +72,7 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'ІКС',
-    fullName_r: "Навчально-наукового інституту комп'ютерних систем",
+    fullNameGenitive: "Навчально-наукового інституту комп'ютерних систем",
     fullForm: 'денної форми навчання',
     position: 'директора',
     form: 'Денна',
@@ -81,7 +82,7 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'ІШІР',
-    fullName_r:
+    fullNameGenitive:
       'Навчально-наукового інституту штучного інтелекту та робототехніки',
     fullForm: 'денної форми навчання',
     position: 'директора',
@@ -92,7 +93,8 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'ІМБТ',
-    fullName_r: 'Навчально-наукового інституту машинобудування та транспорту',
+    fullNameGenitive:
+      'Навчально-наукового інституту машинобудування та транспорту',
     fullForm: 'денної форми навчання',
     position: 'директора',
     form: 'Денна',
@@ -102,7 +104,7 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'ІМІ',
-    fullName_r: 'Навчально-наукового інституту медичної інженерії',
+    fullNameGenitive: 'Навчально-наукового інституту медичної інженерії',
     fullForm: 'денної форми навчання',
     position: 'директора',
     form: 'Денна',
@@ -112,7 +114,7 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'ІПТДМ',
-    fullName_r: 'Навчально-наукового ',
+    fullNameGenitive: 'Навчально-наукового ',
     fullForm: 'денної форми навчання',
     position: 'директора',
     form: 'Денна',
@@ -123,7 +125,7 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'УІІ',
-    fullName_r: 'Українсько-іспанського навчально-наукового інституту',
+    fullNameGenitive: 'Українсько-іспанського навчально-наукового інституту',
     fullForm: 'денної форми навчання',
     position: 'директора',
     form: 'Денна',
@@ -133,7 +135,7 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'УНІ',
-    fullName_r: 'Українсько-німецького навчально-наукового інституту',
+    fullNameGenitive: 'Українсько-німецького навчально-наукового інституту',
     fullForm: 'денної форми навчання',
     position: 'директора',
     form: 'Денна',
@@ -143,7 +145,7 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'УПІ',
-    fullName_r: 'Українсько-польського навчально-наукового інституту',
+    fullNameGenitive: 'Українсько-польського навчально-наукового інституту',
     fullForm: 'денної форми навчання',
     position: 'директора',
     form: 'Денна',
@@ -153,7 +155,7 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'ХТФ',
-    fullName_r: 'Хіміко-технологічного факультету',
+    fullNameGenitive: 'Хіміко-технологічного факультету',
     fullForm: 'денної форми навчання',
     position: 'декана',
     form: 'Денна',
@@ -163,7 +165,8 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'ВАД',
-    fullName_r: 'аспірантури Державного університету «Одеська політехніка»',
+    fullNameGenitive:
+      'аспірантури Державного університету «Одеська політехніка»',
     fullForm: 'денної форми навчання',
     position: 'начальника відділу',
     form: 'Денна',
@@ -174,7 +177,8 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'ВАД',
-    fullName_r: 'аспірантури Державного університету «Одеська політехніка»',
+    fullNameGenitive:
+      'аспірантури Державного університету «Одеська політехніка»',
     fullForm: 'заочної форми навчання',
     position: 'начальника відділу',
     form: 'Заочна',
@@ -185,7 +189,7 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'ЦПО ІПП',
-    fullName_r:
+    fullNameGenitive:
       'Центру післядипломної освіти, індивідуальної підготовки та перепідготовки',
     fullForm: 'заочної форми навчання',
     position: 'директора',
@@ -197,7 +201,7 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'УНЦ ІДЗО',
-    fullName_r:
+    fullNameGenitive:
       'Управління навчальних центрів навчально-наукового інституту дистанційної і заочної освіти',
     fullForm: 'заочної форми навчання',
     position: 'директора',
@@ -209,7 +213,7 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'ІГН',
-    fullName_r: 'Навчально-наукового інституту гуманітарних наук',
+    fullNameGenitive: 'Навчально-наукового інституту гуманітарних наук',
     fullForm: 'денної форми навчання',
     position: 'директора',
     form: 'Денна',
@@ -219,7 +223,8 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'ІДЗО',
-    fullName_r: 'Навчально-наукового інституту дистанційної та заочної освіти',
+    fullNameGenitive:
+      'Навчально-наукового інституту дистанційної та заочної освіти',
     fullForm: 'заочної форми навчання',
     position: 'директора',
     form: 'Заочна',
@@ -229,7 +234,7 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'ІЕМ',
-    fullName_r: 'Навчально-наукового інституту економіки та менеджменту',
+    fullNameGenitive: 'Навчально-наукового інституту економіки та менеджменту',
     fullForm: 'денної форми навчання',
     position: 'директора',
     form: 'Денна',
@@ -239,7 +244,7 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'ІЕЕ',
-    fullName_r:
+    fullNameGenitive:
       'Навчально-наукового інституту електротехніки та електромеханіки',
     fullForm: 'денної форми навчання',
     position: 'директора',
@@ -250,7 +255,7 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'ІЕ',
-    fullName_r: 'Навчально-наукового інституту енергетики',
+    fullNameGenitive: 'Навчально-наукового інституту енергетики',
     fullForm: 'денної форми навчання',
     position: 'директора',
     form: 'Денна',
@@ -260,7 +265,7 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'ІІБРТ',
-    fullName_r:
+    fullNameGenitive:
       'Навчально-наукового інституту інформаційної безпеки, радіоелектроніки та телекомунікацій',
     fullForm: 'денної форми навчання',
     position: 'директора',
@@ -272,7 +277,7 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'ІКС',
-    fullName_r: "Навчально-наукового інституту комп'ютерних систем",
+    fullNameGenitive: "Навчально-наукового інституту комп'ютерних систем",
     fullForm: 'денної форми навчання',
     position: 'директора',
     form: 'Денна',
@@ -282,7 +287,7 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'ІМІ',
-    fullName_r: 'Навчально-наукового інституту медичної інженерії',
+    fullNameGenitive: 'Навчально-наукового інституту медичної інженерії',
     fullForm: 'денної форми навчання',
     position: 'директора',
     form: 'Денна',
@@ -292,7 +297,8 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: '?',
-    fullName_r: 'Навчально-наукового інституту підготовки іноземних громадян',
+    fullNameGenitive:
+      'Навчально-наукового інституту підготовки іноземних громадян',
     fullForm: 'денної форми навчання',
     position: 'директора',
     form: 'Денна',
@@ -302,7 +308,8 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'ІПСУ',
-    fullName_r: 'Навчально-наукового інституту публічної служби та управління',
+    fullNameGenitive:
+      'Навчально-наукового інституту публічної служби та управління',
     fullForm: 'денної форми навчання',
     position: 'директора',
     form: 'Денна',
@@ -312,7 +319,8 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'ІХТФ',
-    fullName_r: 'Навчально-наукового інституту хімічних технологій та фармації',
+    fullNameGenitive:
+      'Навчально-наукового інституту хімічних технологій та фармації',
     fullForm: 'денної форми навчання',
     position: 'директора',
     form: 'Денна',
@@ -322,7 +330,7 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'ІЦТДТ',
-    fullName_r:
+    fullNameGenitive:
       'Навчально-наукового інституту цифрових технологій, дизайну та транспорту',
     fullForm: 'денної форми навчання',
     position: 'директора',
@@ -334,7 +342,7 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'ІШІР',
-    fullName_r:
+    fullNameGenitive:
       'Навчально-наукового інституту штучного інтелекту та робототехніки',
     fullForm: 'денної форми навчання',
     position: 'директора',
@@ -345,7 +353,7 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'УІІ',
-    fullName_r: 'Українсько-іспанського навчально-наукового інституту',
+    fullNameGenitive: 'Українсько-іспанського навчально-наукового інституту',
     fullForm: 'денної форми навчання',
     position: 'директора',
     form: 'Денна',
@@ -355,7 +363,7 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'УНІ',
-    fullName_r: 'українсько-німецького навчально-наукового інституту',
+    fullNameGenitive: 'українсько-німецького навчально-наукового інституту',
     fullForm: 'денної форми навчання',
     position: 'директора',
     form: 'Денна',
@@ -365,7 +373,7 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'УПІ',
-    fullName_r: 'Українсько-польського навчально-наукового інституту',
+    fullNameGenitive: 'Українсько-польського навчально-наукового інституту',
     fullForm: 'денної форми навчання',
     position: 'директора',
     form: 'Денна',
@@ -375,7 +383,7 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'УНЦІДЗО',
-    fullName_r:
+    fullNameGenitive:
       'Управління навчальних центрів інституту дистанційної і заочної освіти',
     fullForm: 'заочної форми навчання',
     position: 'директора',
@@ -387,7 +395,7 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'ЦПОІПП',
-    fullName_r:
+    fullNameGenitive:
       'Центру післядипломної освіти, індивідуальної підготовки та перепідготовки',
     fullForm: 'заочної форми навчання',
     position: 'директора',
@@ -399,7 +407,8 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'ВАД',
-    fullName_r: 'аспірантури Державного університету «Одеська політехніка»',
+    fullNameGenitive:
+      'аспірантури Державного університету «Одеська політехніка»',
     fullForm: 'денної форми навчання',
     position: 'начальника відділу',
     form: 'Денна',
@@ -409,7 +418,8 @@ export const FacultyData: IFaculty[] = [
   },
   {
     faculty: 'ВАД',
-    fullName_r: 'аспірантури Державного університету «Одеська політехніка»',
+    fullNameGenitive:
+      'аспірантури Державного університету «Одеська політехніка»',
     fullForm: 'заочної форми навчання',
     position: 'начальника відділу',
     form: 'Заочна',
