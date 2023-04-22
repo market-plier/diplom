@@ -26,11 +26,12 @@ import { AppComponent } from './app.component';
 import { InlineEditComponent } from './components/inline-edit/inline-edit.component';
 import { SelectAllComponent } from './components/select-all/select-all.component';
 import { AgendaDialogComponent } from './dialogs/agenda-dialog/agenda-dialog.component';
+import { CreateDocumentDialogComponent } from './dialogs/create-document-dialog/create-document-dialog.component';
 import { PeopleDialogComponent } from './dialogs/people-dialog/people-dialog.component';
 import { MainEditorComponent } from './main-editor/main-editor.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { PreviewComponent } from './preview/preview.component';
 import { stateReducer } from './store/reducers';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 const dbConfig: DBConfig = {
   name: 'MyDb',
@@ -58,6 +59,7 @@ const dbConfig: DBConfig = {
     AgendaDialogComponent,
     InlineEditComponent,
     PageNotFoundComponent,
+    CreateDocumentDialogComponent,
   ],
   imports: [
     BrowserModule,

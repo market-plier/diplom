@@ -1,0 +1,18 @@
+<h2 mat-dialog-title>Створити новий документ</h2>
+<mat-dialog-content class="mat-typography">
+  <mat-form-field style="width: 100%" appearance="fill">
+    <mat-label>Назва</mat-label>
+    <input [formControl]="formControll" matInput />
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button
+    mat-button
+    [mat-dialog-close]="formControll.value"
+    [disabled]="formControll.invalid"
+    cdkFocusInitial
+  >
+    Створити
+  </button>
+</mat-dialog-actions>

@@ -58,12 +58,21 @@ export class DataService {
         const templateToUpdate = tempData.find((t) => t.id === templateData.id);
         if (templateToUpdate) {
           Object.assign(templateToUpdate, templateData);
+          this.store.dispatch(
+            TemplatesDataActions.upsertTemplatesData({
+              templateData: templateToUpdate,
+            })
+          );
         } else {
           tempData.push(templateData);
-          templateData.id = Math.max(...tempData.map((t) => t.id ?? 0));
+          templateData.id = Math.max(...tempData.map((t) => t.id ?? 1)) + 1;
+          this.store.dispatch(
+            TemplatesDataActions.upsertTemplatesData({ templateData })
+          );
         }
         const tempDataString = JSON.stringify(tempData);
         localStorage.setItem('templatesData', tempDataString);
+        return;
       } catch (error) {
         templateData.id = 1;
         const templates = JSON.stringify([templateData]);

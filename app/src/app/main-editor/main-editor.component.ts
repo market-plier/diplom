@@ -96,28 +96,30 @@ export class MainEditorComponent {
       const id = Number(idParam);
       const template = this.dataService.getTemplateDataById(id);
       if (idParam && !template) {
+        this.router.navigate(['/404']);
       }
       this.currentId = id;
-    });
-    this.store
-      .select(selectTemplateData)
-      .pipe(first())
-      .subscribe((templateData) => {
-        if (templateData) {
-          const temp = Object.assign({}, templateData) as TemplateData;
-          temp.header ?? (temp.header = this.headerDefaultValue);
-          temp.protocol ?? (temp.protocol = this.protocolDefaultValue);
-          console.log(temp, templateData);
-          this.form.patchValue(temp);
-          if (temp.agendaKeys) {
-            temp.agendaKeys.forEach((a) => {
-              this.addAgendaPoint(a);
-            });
-          } else {
-            this.addAgendaPoint();
+      this.store
+        .select(selectTemplateData)
+        .pipe(first())
+        .subscribe((templateData) => {
+          if (templateData) {
+            this.form.reset();
+            const temp = Object.assign({}, templateData) as TemplateData;
+            temp.header ?? (temp.header = this.headerDefaultValue);
+            temp.protocol ?? (temp.protocol = this.protocolDefaultValue);
+            console.log(temp, templateData);
+            this.form.patchValue(temp);
+            if (temp.agendaKeys) {
+              temp.agendaKeys.forEach((a) => {
+                this.addAgendaPoint(a);
+              });
+            } else {
+              this.addAgendaPoint();
+            }
           }
-        }
-      });
+        });
+    });
   }
 
   getArrayControlls(values: string[]) {
