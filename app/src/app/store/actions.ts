@@ -31,3 +31,12 @@ export const ApplicantDataActions = createActionGroup({
     'Update Applicant Data': props<{ applicants: IApplicant[] }>(),
   },
 });
+
+export const TemplatesDataActions = createActionGroup({
+  source: 'Application',
+  events: {
+    'Save Templates Data': props<{ templatesData: TemplateData[] }>(),
+    'Upsert Templates Data': props<{ templateData: TemplateData }>(),
+    'Delete Templates Data': props<{ templateData: TemplateData }>(),
+  },
+});

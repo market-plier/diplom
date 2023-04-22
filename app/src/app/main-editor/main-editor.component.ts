@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { first } from 'rxjs';
 import { AgendaCompositeKey, IApplicantPoint } from '../api/contracts/agenda';
@@ -36,13 +36,22 @@ export class MainEditorComponent {
   staffKeys$ = this.store.select(selectStaffKeys);
   staffResolutions$ = this.store.select(selectStaffResolutions);
 
+  headerDefaultValue = `МІНІСТЕРСТВО ОСВІТИ I НАУКИ УКРАЇНИ
+ДЕРЖАВНИЙ УНІВЕРСИТЕТ «ОДЕСЬКА ПОЛІТЕХНІКА»`;
+
+  protocolDefaultValue = `Протокол №5
+  засідання приймальної комісії
+  від 24 січня 2022 року`;
+  currentId?: number;
+
   constructor(
     private formBuilder: FormBuilder,
     private dataService: DataService,
     private router: Router,
     public dialog: MatDialog,
     private store: Store,
-    private textService: TextBuilderService
+    private textService: TextBuilderService,
+    private route: ActivatedRoute
   ) {
     this.form = this.formBuilder.group({
       header: ['', Validators.required],
@@ -52,19 +61,6 @@ export class MainEditorComponent {
       secretar: [, Validators.required],
       rector: ['', Validators.required],
     });
-    this.store
-      .select(selectTemplateData)
-      .pipe(first())
-      .subscribe((templateData) => {
-        this.form.patchValue(templateData);
-        if (templateData.agendaKeys) {
-          templateData.agendaKeys.forEach((a) => {
-            this.addAgendaPoint(a);
-          });
-        } else {
-          this.addAgendaPoint();
-        }
-      });
     this.form.valueChanges.subscribe((value) => {
       this.store.dispatch(
         TemplateDataActions.updateTemplateData({ templateData: value })
@@ -92,6 +88,36 @@ export class MainEditorComponent {
 
   get agendaPoints(): FormArray {
     return this.form.get('agendaKeys') as FormArray;
+  }
+
+  ngOnInit() {
+    this.route.paramMap.subscribe((params) => {
+      const idParam = params.get('id');
+      const id = Number(idParam);
+      const template = this.dataService.getTemplateDataById(id);
+      if (idParam && !template) {
+      }
+      this.currentId = id;
+    });
+    this.store
+      .select(selectTemplateData)
+      .pipe(first())
+      .subscribe((templateData) => {
+        if (templateData) {
+          const temp = Object.assign({}, templateData) as TemplateData;
+          temp.header ?? (temp.header = this.headerDefaultValue);
+          temp.protocol ?? (temp.protocol = this.protocolDefaultValue);
+          console.log(temp, templateData);
+          this.form.patchValue(temp);
+          if (temp.agendaKeys) {
+            temp.agendaKeys.forEach((a) => {
+              this.addAgendaPoint(a);
+            });
+          } else {
+            this.addAgendaPoint();
+          }
+        }
+      });
   }
 
   getArrayControlls(values: string[]) {
@@ -160,9 +186,9 @@ export class MainEditorComponent {
       speaker: [agenda?.speaker, Validators.required],
       heard: [agenda?.heard, Validators.required],
       agendaAddition: [agenda?.agendaAddition, Validators.required],
-      applicantPoints: this.createApplicantsArrayControll(
-        agenda?.applicantPoints ?? [{}]
-      ),
+      // applicantPoints: this.createApplicantsArrayControll(
+      //   agenda?.applicantPoints ?? [{}]
+      // ),
     });
   }
 
@@ -221,6 +247,12 @@ export class MainEditorComponent {
     ) as TemplateData;
     this.dataService.updateTemplateData(templateData);
     this.router.navigate(['preview']);
+  }
+
+  saveTemplate() {
+    const template = this.form.getRawValue();
+    template.id = this.currentId;
+    this.dataService.upsertTemplate(template);
   }
 
   openDialog() {

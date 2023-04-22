@@ -1,0 +1,15 @@
+<a *ngIf="!isEdit" mat-list-item [routerLink]="link">{{ value }}</a>
+<input *ngIf="isEdit" mat-list-item [(ngModel)]="value" />
+<button *ngIf="!isEdit" (click)="isEdit = !isEdit" mat-icon-button>
+  <mat-icon>edit</mat-icon>
+</button>
+<button
+  *ngIf="isEdit"
+  (click)="update.emit(value); isEdit = !isEdit"
+  mat-icon-button
+>
+  <mat-icon>save</mat-icon>
+</button>
+<button *ngIf="!isEdit" (click)="delete.emit()" mat-icon-button>
+  <mat-icon>delete</mat-icon>
+</button>

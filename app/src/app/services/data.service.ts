@@ -1,18 +1,20 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
-import { AgendaCompositeKey } from '../api/contracts/agenda';
+import { Agenda, AgendaCompositeKey } from '../api/contracts/agenda';
 import { Applicant, IApplicant } from '../api/contracts/applicant';
 import { Staff } from '../api/contracts/staff';
 import { TemplateData } from '../api/contracts/template-data';
 import { _agendaData } from '../data/agenda-data-map';
 import { ApplicantsData } from '../data/applicants-data';
 import { staffData } from '../data/staff-data';
-import { headerData, peopleData, protocolData } from '../data/test-data';
+import { peopleData } from '../data/test-data';
 import {
+  AgendaApiActions,
   ApplicantDataActions,
   StaffDataActions,
   TemplateDataActions,
+  TemplatesDataActions,
 } from '../store/actions';
 import { selectApplicants, selectState } from '../store/selectors';
 import { State } from '../store/state';
@@ -31,15 +33,12 @@ export class DataService {
 
   constructor(private store: Store) {
     try {
-      const templateData = (JSON.parse(
-        localStorage.getItem('documentData') ?? 'null'
-      ) as TemplateData) ?? {
-        header: headerData,
-        protocol: protocolData,
-        agendaKeys: [{}],
-        decision: [{}],
-      };
-      this.updateTemplateData(templateData);
+      let templates = this.getTemplatesData();
+      if (templates) {
+        this.store.dispatch(
+          TemplatesDataActions.saveTemplatesData({ templatesData: templates })
+        );
+      }
     } catch (error) {
       localStorage.clear();
     }
@@ -49,6 +48,78 @@ export class DataService {
     this.store
       .select(selectApplicants)
       .subscribe((value) => (this.applicants = value));
+  }
+
+  upsertTemplate(templateData: TemplateData) {
+    const templatesString = localStorage.getItem('templatesData');
+    if (templatesString) {
+      try {
+        const tempData = JSON.parse(templatesString) as TemplateData[];
+        const templateToUpdate = tempData.find((t) => t.id === templateData.id);
+        if (templateToUpdate) {
+          Object.assign(templateToUpdate, templateData);
+        } else {
+          tempData.push(templateData);
+          templateData.id = Math.max(...tempData.map((t) => t.id ?? 0));
+        }
+        const tempDataString = JSON.stringify(tempData);
+        localStorage.setItem('templatesData', tempDataString);
+      } catch (error) {
+        templateData.id = 1;
+        const templates = JSON.stringify([templateData]);
+        localStorage.setItem('templatesData', templates);
+      }
+    } else {
+      templateData.id = 1;
+      const templates = JSON.stringify([templateData]);
+      localStorage.setItem('templatesData', templates);
+    }
+    this.store.dispatch(
+      TemplatesDataActions.upsertTemplatesData({ templateData })
+    );
+  }
+
+  deleteTemplate(template: TemplateData) {
+    const templatesString = localStorage.getItem('templatesData');
+    if (templatesString) {
+      try {
+        const tempData = JSON.parse(templatesString) as TemplateData[];
+
+        const tempDataString = JSON.stringify(
+          tempData.filter((t) => t.id !== template.id)
+        );
+        localStorage.setItem('templatesData', tempDataString);
+      } catch (error) {}
+    } else {
+    }
+    this.store.dispatch(
+      TemplatesDataActions.deleteTemplatesData({ templateData: template })
+    );
+  }
+
+  getTemplateDataById(id: number) {
+    const templates = localStorage.getItem('templatesData');
+    let template: TemplateData | undefined;
+    if (templates) {
+      try {
+        const tempData = JSON.parse(templates) as TemplateData[];
+        template = tempData.find((t) => t.id === id) ?? {};
+      } catch (error) {}
+    } else {
+    }
+    this.updateTemplateData(template ?? {});
+    return template;
+  }
+
+  getTemplatesData() {
+    const templates = localStorage.getItem('templatesData');
+    let tempData: TemplateData[] | undefined;
+    if (templates) {
+      try {
+        tempData = JSON.parse(templates) as TemplateData[];
+      } catch (error) {}
+    }
+    return tempData;
   }
 
   getAgenda() {
@@ -104,5 +175,9 @@ export class DataService {
     this.store.dispatch(
       ApplicantDataActions.updateApplicantData({ applicants })
     );
+  }
+
+  updateAgendaData(agendas: Agenda[]) {
+    this.store.dispatch(AgendaApiActions.retrievedAgendas({ agendas }));
   }
 }

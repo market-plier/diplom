@@ -138,7 +138,7 @@
             >
           </mat-select>
         </mat-form-field>
-        <p>Здобувачі:</p>
+        <!-- <p>Здобувачі:</p>
         <ng-container formArrayName="applicantPoints">
           <ng-container
             *ngFor="
@@ -203,14 +203,14 @@
               </button>
             </div>
           </ng-container>
-        </ng-container>
-        <button
+        </ng-container> -->
+        <!-- <button
           mat-raised-button
           color="secondary"
           (click)="addApplicantPoint($any(agendaForm))"
         >
           Додати здобувача
-        </button>
+        </button> -->
         <mat-card class="agenda">
           <mat-card-content>
             <span>{{
@@ -262,5 +262,8 @@
     mat-raised-button
   >
     Превью
+  </button>
+  <button (click)="saveTemplate()" [disabled]="form.invalid" mat-raised-button>
+    Зберегти
   </button>
 </div>

@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from './services/data.service';
 import { Store } from '@ngrx/store';
+import { tap } from 'rxjs';
+import { TemplateData } from './api/contracts/template-data';
+import { DataService } from './services/data.service';
 import { AgendaApiActions } from './store/actions';
+import { selectTemplatesData } from './store/selectors';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +13,9 @@ import { AgendaApiActions } from './store/actions';
 })
 export class AppComponent implements OnInit {
   title = 'diplom';
-
+  templates$ = this.store
+    .select(selectTemplatesData)
+    .pipe(tap((x) => console.log(x)));
   constructor(private dataService: DataService, private store: Store) {}
 
   ngOnInit() {
@@ -21,5 +26,14 @@ export class AppComponent implements OnInit {
           AgendaApiActions.retrievedAgendas({ agendas: value })
         )
       );
+  }
+
+  onDeleteTemplate(template: TemplateData) {
+    this.dataService.deleteTemplate(template);
+  }
+
+  onUpdateTemplateName(template: TemplateData, name: string) {
+    const temp = Object.assign({}, template, { name });
+    this.dataService.upsertTemplate(temp);
   }
 }

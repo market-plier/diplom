@@ -7,4 +7,7 @@ export interface TemplateData {
   agendaKeys?: AgendaCompositeKey[];
   secretar?: string;
   rector?: string;
+  date?: string;
+  name?: string;
+  id?: number;
 }

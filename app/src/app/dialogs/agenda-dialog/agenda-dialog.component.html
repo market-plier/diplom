@@ -1,0 +1,156 @@
+<h2 mat-dialog-title>Редагування Довідника Порядку Денного</h2>
+<mat-dialog-content class="mat-typography">
+  <div class="table-container">
+    <mat-table #table [dataSource]="dataSource">
+      <!-- Position Column -->
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef> Id. </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{ element.id }} </mat-cell>
+      </ng-container>
+      <!-- Name Column -->
+      <ng-container matColumnDef="keyword">
+        <mat-header-cell *matHeaderCellDef> Ключеве Слово</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <mat-form-field appearance="fill">
+            <input
+              matInput
+              [value]="element.keyword"
+              [(ngModel)]="element.keyword"
+            />
+          </mat-form-field>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="agendaType">
+        <mat-header-cell *matHeaderCellDef>
+          Тип Порядку Денного</mat-header-cell
+        >
+        <mat-cell *matCellDef="let element">
+          <mat-form-field appearance="fill">
+            <textarea
+              matInput
+              [value]="element.agendaType"
+              [(ngModel)]="element.agendaType"
+            ></textarea>
+          </mat-form-field>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="part1">
+        <mat-header-cell *matHeaderCellDef>Ч1 </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <mat-form-field appearance="fill">
+            <textarea
+              matInput
+              [value]="element.part1"
+              [(ngModel)]="element.part1"
+            ></textarea>
+          </mat-form-field>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="part2">
+        <mat-header-cell *matHeaderCellDef> Ч2</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <mat-form-field appearance="fill">
+            <textarea
+              matInput
+              [value]="element.part2"
+              [(ngModel)]="element.part2"
+            ></textarea>
+          </mat-form-field>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="part3">
+        <mat-header-cell *matHeaderCellDef> Ч3 </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <mat-form-field appearance="fill">
+            <textarea
+              matInput
+              [value]="element.part3"
+              [(ngModel)]="element.part3"
+            ></textarea>
+          </mat-form-field>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="part4">
+        <mat-header-cell *matHeaderCellDef> Ч4 </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <mat-form-field appearance="fill">
+            <textarea
+              matInput
+              [value]="element.part4"
+              [(ngModel)]="element.part4"
+            ></textarea>
+          </mat-form-field>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="decisionType">
+        <mat-header-cell *matHeaderCellDef> Тип Вирішили </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <mat-form-field appearance="fill">
+            <textarea
+              matInput
+              [value]="element.decisionType"
+              [(ngModel)]="element.decisionType"
+            ></textarea>
+          </mat-form-field>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="keyNationality">
+        <mat-header-cell *matHeaderCellDef> Громадянство </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <mat-form-field appearance="fill">
+            <input
+              matInput
+              [value]="element.keyNationality"
+              [(ngModel)]="element.keyNationality"
+            />
+          </mat-form-field>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="keyFormOfEducation">
+        <mat-header-cell *matHeaderCellDef> Форма Навчання</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <mat-form-field appearance="fill">
+            <input
+              matInput
+              [value]="element.keyFormOfEducation"
+              [(ngModel)]="element.keyFormOfEducation"
+            />
+          </mat-form-field>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="keyEntryBase">
+        <mat-header-cell *matHeaderCellDef> База Вступу </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <mat-form-field appearance="fill">
+            <input
+              matInput
+              [value]="element.keyEntryBase"
+              [(ngModel)]="element.keyEntryBase"
+            />
+          </mat-form-field>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="keyEducationDegree">
+        <mat-header-cell *matHeaderCellDef> Освітній Ступінь</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <mat-form-field appearance="fill">
+            <input
+              matInput
+              [value]="element.keyEducationDegree"
+              [(ngModel)]="element.keyEducationDegree"
+            />
+          </mat-form-field>
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+    </mat-table>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="dataSource" cdkFocusInitial>
+    Save
+  </button>
+</mat-dialog-actions>

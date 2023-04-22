@@ -13,6 +13,10 @@ export const selectTemplateData = createSelector(selectState, (state) => {
   return state.templateData;
 });
 
+export const selectTemplatesData = createSelector(selectState, (state) => {
+  return state.templatesData;
+});
+
 export const selectStaffData = createSelector(selectState, (state) => {
   return state.staff;
 });
@@ -21,22 +25,12 @@ export const selectApplicants = createSelector(selectState, (state) => {
   return state.applicants.map((ap) => new Applicant(ap));
 });
 
-export const secelctAvailableApplicants = createSelector(
-  selectApplicants,
-  selectTemplateData,
-  (applicants, templateData) => {
-    return applicants.filter(
-      (a) => a.getEducationDegree() === templateData.agendaKeys
-    );
-  }
-);
-
 export const selectAgendasByKeys = createSelector(
   selectAgendas,
   selectTemplateData,
   (agendas, templateData) => {
     return agendas.reduce((acc, curr) => {
-      const hasKey = templateData.agendaKeys?.some(
+      const hasKey = templateData?.agendaKeys?.some(
         (ak) =>
           ak.educationDegree === curr.keyEducationDegree &&
           ak.entryBase === curr.keyEntryBase &&

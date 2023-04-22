@@ -1,6 +1,29 @@
-<p>
-  <mat-toolbar>
-    <span>PDF Document Generator</span>
-  </mat-toolbar>
-</p>
-<router-outlet></router-outlet>
+<mat-sidenav-container>
+  <mat-sidenav style="width: 400px" #sidenav>
+    <mat-nav-list>
+      <a mat-list-item [routerLink]="'/admin'"> Admin Page </a>
+      <ng-container *ngFor="let template of templates$ | async">
+        <app-inline-edit
+          [link]="'/editor/' + template.id"
+          [value]="template.name ?? ''"
+          (update)="onUpdateTemplateName(template, $event)"
+          (delete)="onDeleteTemplate(template)"
+        >
+        </app-inline-edit>
+      </ng-container>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <p>
+      <mat-toolbar>
+        <button (click)="sidenav.toggle()" mat-icon-button>
+          <mat-icon>menu</mat-icon>
+        </button>
+        <span>PDF Document Generator</span>
+      </mat-toolbar>
+    </p>
+    <div style="min-height: 85vh">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

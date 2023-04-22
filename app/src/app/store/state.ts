@@ -7,5 +7,6 @@ export interface State {
   agenda: Agenda[];
   staff: Staff[];
   applicants: IApplicant[];
-  templateData: TemplateData;
+  templateData?: TemplateData;
+  templatesData?: TemplateData[];
 }
