@@ -45,7 +45,7 @@ export class MainEditorComponent {
   educationDegreeKeys$ = this.store.select(selectAgendaEducationDegreeKeys);
 
   headerDefaultValue = `МІНІСТЕРСТВО ОСВІТИ I НАУКИ УКРАЇНИ
-ДЕРЖАВНИЙ УНІВЕРСИТЕТ «ОДЕСЬКА ПОЛІТЕХНІКА»`;
+НАЦІОНАЛЬНИЙ УНІВЕРСИТЕТ «ОДЕСЬКА ПОЛІТЕХНІКА»`;
 
   protocolDefaultValue = `Протокол №5
   засідання приймальної комісії`;
