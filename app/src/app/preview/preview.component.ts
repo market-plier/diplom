@@ -36,26 +36,41 @@ export class PreviewComponent {
     const agenda = this.dataService.getAgendaByKey(agendaKey);
     const heard = this.dataService.getStaffByKey(agendaKey.heard ?? '');
     const speaker = this.dataService.getStaffByKey(agendaKey.speaker ?? '');
-    const applicantPoints = agendaKey.applicantPoints?.map((a) => {
-      return {
-        applicant: this.dataService.getApplicantByFullName(a.applicant ?? ''),
-        source: a.source ?? '',
-        resolution: a.resolution ?? '',
-        zavKurs: a.zavKurs ?? '',
-        previousEducationalEstablishment:
-          a.previousEducationalEstablishment ?? '',
-        addition: a.addition ?? '',
-      };
-    });
     if (agenda) {
       return this.textService.getDecisionValue(
         questionId,
         agenda,
         heard,
-        speaker,
-        applicantPoints
+        speaker
       );
     }
     return '';
+  }
+
+  convertDate(date: string) {
+    const months = [
+      'січня',
+      'лютого',
+      'березня',
+      'квітня',
+      'травня',
+      'червня',
+      'липня',
+      'серпня',
+      'вересня',
+      'жовтня',
+      'листопада',
+      'грудня',
+    ];
+
+    const selectedData = new Date(date);
+
+    const day = selectedData.getDate();
+    const month = months[selectedData.getMonth()];
+    const year = selectedData.getFullYear();
+
+    const formattedDate = `${day} ${month} ${year} року`;
+
+    return formattedDate;
   }
 }

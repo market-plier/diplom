@@ -25,6 +25,7 @@
     "@ngrx/store-devtools": "^15.4.0",
     "jspdf": "^2.5.1",
     "lodash-es": "^4.17.21",
+    "ng-table-virtual-scroll": "^1.6.0",
     "ngx-indexed-db": "^16.0.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",

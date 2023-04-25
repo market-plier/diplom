@@ -1,13 +1,13 @@
 import { createActionGroup, props } from '@ngrx/store';
-import { Agenda } from '../api/contracts/agenda';
+import { IAgenda } from '../api/contracts/agenda';
 import { IApplicant } from '../api/contracts/applicant';
-import { Staff } from '../api/contracts/staff';
+import { IStaff } from '../api/contracts/staff';
 import { TemplateData } from '../api/contracts/template-data';
 
 export const AgendaApiActions = createActionGroup({
   source: 'Data Service',
   events: {
-    'Retrieved Agendas': props<{ agendas: Agenda[] }>(),
+    'Retrieved Agendas': props<{ agendas: IAgenda[] }>(),
   },
 });
 
@@ -21,7 +21,7 @@ export const TemplateDataActions = createActionGroup({
 export const StaffDataActions = createActionGroup({
   source: 'Application',
   events: {
-    'Update Staff Data': props<{ staff: Staff[] }>(),
+    'Update Staff Data': props<{ staff: IStaff[] }>(),
   },
 });
 

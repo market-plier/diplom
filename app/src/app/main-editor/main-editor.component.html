@@ -24,9 +24,14 @@
       cdkAutosizeMaxRows="5"
     ></textarea>
   </mat-form-field>
-  <button (click)="openDialog()" style="margin-bottom: 8px" mat-raised-button>
-    Редагувати Присутніх
-  </button>
+  <div class="datepicker">
+    від
+    <mat-form-field>
+      <input matInput [matDatepicker]="picker" formControlName="date" />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
   <mat-form-field appearance="fill">
     <mat-label>Присутні:</mat-label>
     <mat-select formControlName="people" multiple>
@@ -59,7 +64,7 @@
             <mat-label>Громадянство</mat-label>
             <mat-select formControlName="nationality">
               <mat-option
-                *ngFor="let nationality of nationalities"
+                *ngFor="let nationality of nationalityKeys$ | async"
                 [value]="nationality"
                 >{{ nationality }}</mat-option
               >
@@ -69,7 +74,7 @@
             <mat-label>Форма навчання</mat-label>
             <mat-select formControlName="formOfEducation">
               <mat-option
-                *ngFor="let formOfEducation of formsOfEducation"
+                *ngFor="let formOfEducation of formOfEducationKeys$ | async"
                 [value]="formOfEducation"
                 >{{ formOfEducation }}</mat-option
               >
@@ -79,7 +84,7 @@
             <mat-label>База вступу</mat-label>
             <mat-select formControlName="entryBase">
               <mat-option
-                *ngFor="let entryBase of entryBases"
+                *ngFor="let entryBase of entryBaseKeys$ | async"
                 [value]="entryBase"
                 >{{ entryBase }}</mat-option
               >
@@ -89,7 +94,7 @@
             <mat-label>Освітній ступінь</mat-label>
             <mat-select formControlName="educationDegree">
               <mat-option
-                *ngFor="let educationDegree of educationDegrees"
+                *ngFor="let educationDegree of educationDegreeKeys$ | async"
                 [value]="educationDegree"
                 >{{ educationDegree }}</mat-option
               >

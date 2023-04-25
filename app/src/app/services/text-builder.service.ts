@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Agenda } from '../api/contracts/agenda';
+import { IAgenda } from '../api/contracts/agenda';
 import { Applicant } from '../api/contracts/applicant';
 import { GenderSelectMap } from '../api/contracts/enums';
-import { Staff } from '../api/contracts/staff';
+import { IStaff } from '../api/contracts/staff';
 import { questionsMap } from '../data/question-number-map';
 import { staffData } from '../data/staff-data';
 
@@ -15,17 +15,9 @@ export class TextBuilderService {
 
   getDecisionValue(
     questionId: number,
-    agendaData: Agenda,
-    heard?: Staff,
-    speaker?: Staff,
-    applicantPoints?: {
-      applicant?: Applicant;
-      source: string;
-      resolution: string;
-      addition: string;
-      zavKurs: string;
-      previousEducationalEstablishment: string;
-    }[]
+    agendaData: IAgenda,
+    heard?: IStaff,
+    speaker?: IStaff
   ) {
     const questionNumberValue = questionsMap.find(
       (q) => q.id === questionId
@@ -67,21 +59,22 @@ export class TextBuilderService {
     //   }
     // });
 
-    return `${heardValue}${speakerValue}${
-      this.getDecisionText(agendaData) ?? 'Не знайдено'
-    }`;
+    return `${heardValue}${speakerValue}${this.getDecisionText(agendaData)}`;
   }
 
-  getDecisionText(agendaData: Agenda) {
+  getDecisionText(agendaData: IAgenda) {
+    if (!agendaData.decisionType && !agendaData.part2 && !agendaData.part2) {
+      return 'Не знайдено Текст вирішили';
+    }
     return `${agendaData.decisionType}${agendaData.part2}${agendaData.part3}`;
   }
 
-  getAgendaValue(questionId: number, agendaData?: Agenda) {
-    return `${agendaData?.agendaType ?? 'Не знайдено'}`;
+  getAgendaValue(questionId: number, agendaData?: IAgenda) {
+    return `${agendaData?.agendaType ?? 'Не знайдено Порядок денний'}`;
   }
 
   getApplicantText(
-    agenda: Agenda,
+    agenda: IAgenda,
     applicant: Applicant,
     source: string,
     resolution: string,
@@ -152,7 +145,7 @@ export class TextBuilderService {
   }
 
   getTextPart1(
-    agenda: Agenda,
+    agenda: IAgenda,
     applicant: Applicant,
     source: string,
     resolution: string,
@@ -216,7 +209,7 @@ export class TextBuilderService {
   }
 
   getTextPart2(
-    agenda: Agenda,
+    agenda: IAgenda,
     applicant: Applicant,
     source: string,
     resolution: string,
@@ -268,7 +261,7 @@ export class TextBuilderService {
   }
 
   getTextPart3(
-    agenda: Agenda,
+    agenda: IAgenda,
     applicant: Applicant,
     source: string,
     resolution: string,
@@ -362,7 +355,7 @@ export class TextBuilderService {
   }
 
   getTextPart4(
-    agenda: Agenda,
+    agenda: IAgenda,
     applicant: Applicant,
     source: string,
     resolution: string,
@@ -433,7 +426,7 @@ export class TextBuilderService {
   }
 
   getTextPart5(
-    agenda: Agenda,
+    agenda: IAgenda,
     applicant: Applicant,
     source: string,
     resolution: string,

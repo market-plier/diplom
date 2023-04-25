@@ -1,6 +1,6 @@
-import { Staff } from '../api/contracts/staff';
+import { IStaff } from '../api/contracts/staff';
 
-export const staffData: Staff[] = [
+export const staffData: IStaff[] = [
   {
     subdivision: 'Гол. ПК',
     position: 'голова ПК',

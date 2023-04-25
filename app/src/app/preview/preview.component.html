@@ -1,102 +1,103 @@
-<div class="buttons">
-  <a mat-raised-button routerLink="/editor" class=""
-    >Повернутися до заповнення</a
-  >
-  <button
-    (click)="onGenerateClick()"
-    class="generate-pdf"
-    mat-raised-button
-    color="primary"
-  >
-    Згенерувати PDF
-  </button>
-</div>
-<div class="container">
-  <div
-    style="
-      font-family: 'Times New Roman', Times, serif;
-      padding: 1cm;
-      padding-left: 2.5cm;
-      width: 21cm;
-      white-space: pre-wrap;
-    "
-    #document
-  >
-    <div class="header" style="margin-left: -40px">
-      <div
-        style="
-          text-align: center;
-          font-size: 16px;
-          font-weight: bold;
-          white-space: pre-wrap;
-        "
-      >
-        {{ (templateData$ | async)?.header }}
-      </div>
-      <img
-        height="77"
-        width="64"
-        [src]="logo"
-        style="margin: auto; display: block"
-        alt="logo"
-      />
-      <div
-        style="
-          text-align: center;
-          font-size: 16px;
-          font-weight: bold;
-          white-space: pre-wrap;
-        "
-      >
-        {{ (templateData$ | async)?.protocol }}
-      </div>
-    </div>
-    <br />
-    <div
-      *ngIf="(templateData$ | async)?.people?.length"
-      style="font-size: 16px"
+<ng-container *ngIf="templateData$ | async as templateData">
+  <div class="buttons">
+    <a mat-raised-button [routerLink]="'/editor/' + templateData.id" class=""
+      >Повернутися до заповнення</a
     >
-      <div style="font-weight: bold">Присутні</div>
+    <button
+      (click)="onGenerateClick()"
+      class="generate-pdf"
+      mat-raised-button
+      color="primary"
+    >
+      Згенерувати PDF
+    </button>
+  </div>
+  <div class="container">
+    <div
+      style="
+        font-family: 'Times New Roman', Times, serif;
+        padding: 1cm;
+        padding-left: 2.5cm;
+        width: 21cm;
+        white-space: pre-wrap;
+      "
+      #document
+    >
+      <div class="header" style="margin-left: -40px">
+        <div
+          style="
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            white-space: pre-wrap;
+          "
+        >
+          {{ templateData.header }}
+        </div>
+        <img
+          height="77"
+          width="64"
+          [src]="logo"
+          style="margin: auto; display: block"
+          alt="logo"
+        />
+        <div
+          style="
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            white-space: pre-wrap;
+          "
+        >
+          {{ templateData.protocol }} <br />
+          від
+          {{ convertDate(templateData.date ?? "") }}
+        </div>
+      </div>
       <br />
-      <div style="font-weight: normal">
-        <span>{{ (templateData$ | async)?.people?.join("; ")?.trim() }}</span>
+      <div *ngIf="templateData?.people?.length" style="font-size: 16px">
+        <div style="font-weight: bold">Присутні</div>
+        <br />
+        <div style="font-weight: normal">
+          <span>{{ templateData?.people?.join("; ")?.trim() }}</span>
+        </div>
       </div>
-    </div>
-    <br />
-    <div style="font-weight: bold">Порядок денний:</div>
-    <br />
-    <div
-      style="display: flex; margin-left: 43px; gap: 7px; margin-top: 3px"
-      *ngFor="let item of (templateData$ | async)?.agendaKeys; let i = index"
-    >
-      <div>{{ i + 1 }}.</div>
-      <div>{{ getAgendaValue(item, i + 1) }}</div>
-    </div>
-    <br />
-    <div style="font-weight: bold">Вирішили:</div>
-    <br />
-    <div
-      style="display: flex; margin-left: 43px; gap: 7px; margin-top: 3px"
-      *ngFor="let item of (templateData$ | async)?.agendaKeys; let i = index"
-    >
-      <div>{{ i + 1 }}.</div>
-      <div>{{ getDecisionValue(item, i + 1) }}</div>
-    </div>
-    <br />
-    <div
-      style="margin-left: 63px; display: flex; justify-content: space-between"
-    >
-      <div>Ректор</div>
-      <div style="min-width: 170px">{{ (templateData$ | async)?.rector }}</div>
-    </div>
-    <br />
-    <div
-      style="margin-left: 63px; display: flex; justify-content: space-between"
-    >
-      <div>Відповідальний секретар ПК</div>
-      <div style="min-width: 170px">
-        <span>{{ (templateData$ | async)?.secretar }}</span>
+      <br />
+      <div style="font-weight: bold">Порядок денний:</div>
+      <br />
+      <div
+        style="display: flex; margin-left: 43px; gap: 7px; margin-top: 3px"
+        *ngFor="let item of templateData.agendaKeys; let i = index"
+      >
+        <div>{{ i + 1 }}.</div>
+        <div>{{ getAgendaValue(item, i + 1) }}</div>
+      </div>
+      <br />
+      <div style="font-weight: bold">Вирішили:</div>
+      <br />
+      <div
+        style="display: flex; margin-left: 43px; gap: 7px; margin-top: 3px"
+        *ngFor="let item of templateData.agendaKeys; let i = index"
+      >
+        <div>{{ i + 1 }}.</div>
+        <div>{{ getDecisionValue(item, i + 1) }}</div>
+      </div>
+      <br />
+      <div
+        style="margin-left: 63px; display: flex; justify-content: space-between"
+      >
+        <div>Ректор</div>
+        <div style="min-width: 170px">{{ templateData.rector }}</div>
+      </div>
+      <br />
+      <div
+        style="margin-left: 63px; display: flex; justify-content: space-between"
+      >
+        <div>Відповідальний секретар ПК</div>
+        <div style="min-width: 170px">
+          <span>{{ templateData.secretar }}</span>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</ng-container>

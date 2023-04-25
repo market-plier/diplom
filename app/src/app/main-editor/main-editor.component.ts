@@ -12,12 +12,15 @@ import {
   Nationality,
 } from '../api/contracts/enums';
 import { TemplateData } from '../api/contracts/template-data';
-import { PeopleDialogComponent } from '../dialogs/people-dialog/people-dialog.component';
 import { DataService } from '../services/data.service';
 import { TextBuilderService } from '../services/text-builder.service';
 import { TemplateDataActions } from '../store/actions';
 import {
+  selectAgendaEducationDegreeKeys,
+  selectAgendaEntryBaseKeys,
+  selectAgendaFormOfEducationKeys,
   selectAgendaKeys,
+  selectAgendaNationalityKeys,
   selectStaffKeys,
   selectStaffResolutions,
   selectTemplateData,
@@ -36,12 +39,16 @@ export class MainEditorComponent {
   staffKeys$ = this.store.select(selectStaffKeys);
   staffResolutions$ = this.store.select(selectStaffResolutions);
 
+  nationalityKeys$ = this.store.select(selectAgendaNationalityKeys);
+  formOfEducationKeys$ = this.store.select(selectAgendaFormOfEducationKeys);
+  entryBaseKeys$ = this.store.select(selectAgendaEntryBaseKeys);
+  educationDegreeKeys$ = this.store.select(selectAgendaEducationDegreeKeys);
+
   headerDefaultValue = `МІНІСТЕРСТВО ОСВІТИ I НАУКИ УКРАЇНИ
 ДЕРЖАВНИЙ УНІВЕРСИТЕТ «ОДЕСЬКА ПОЛІТЕХНІКА»`;
 
   protocolDefaultValue = `Протокол №5
-  засідання приймальної комісії
-  від 24 січня 2022 року`;
+  засідання приймальної комісії`;
   currentId?: number;
 
   constructor(
@@ -60,8 +67,10 @@ export class MainEditorComponent {
       agendaKeys: this.getAgendaArrayControlls([]),
       secretar: [, Validators.required],
       rector: ['', Validators.required],
+      date: ['', Validators.required],
     });
     this.form.valueChanges.subscribe((value) => {
+      value.id = this.currentId;
       this.store.dispatch(
         TemplateDataActions.updateTemplateData({ templateData: value })
       );
@@ -69,7 +78,7 @@ export class MainEditorComponent {
   }
 
   get people() {
-    return this.dataService.allPeople.map((p) => p.fullName);
+    return this.dataService.state.staff.map((p) => p.fullName);
   }
 
   get nationalities() {
@@ -108,7 +117,6 @@ export class MainEditorComponent {
             const temp = Object.assign({}, templateData) as TemplateData;
             temp.header ?? (temp.header = this.headerDefaultValue);
             temp.protocol ?? (temp.protocol = this.protocolDefaultValue);
-            console.log(temp, templateData);
             this.form.patchValue(temp);
             if (temp.agendaKeys) {
               temp.agendaKeys.forEach((a) => {
@@ -149,24 +157,23 @@ export class MainEditorComponent {
     const agenda = this.dataService.getAgendaByKey(agendaKey);
     const heard = this.dataService.getStaffByKey(agendaKey.heard ?? '');
     const speaker = this.dataService.getStaffByKey(agendaKey.speaker ?? '');
-    const applicantPoints = agendaKey.applicantPoints?.map((a) => {
-      return {
-        applicant: this.dataService.getApplicantByFullName(a.applicant ?? ''),
-        source: a.source ?? '',
-        resolution: a.resolution ?? '',
-        zavKurs: a.zavKurs ?? '',
-        previousEducationalEstablishment:
-          a.previousEducationalEstablishment ?? '',
-        addition: a.addition ?? '',
-      };
-    });
+    // const applicantPoints = agendaKey.applicantPoints?.map((a) => {
+    //   return {
+    //     applicant: this.dataService.getApplicantByFullName(a.applicant ?? ''),
+    //     source: a.source ?? '',
+    //     resolution: a.resolution ?? '',
+    //     zavKurs: a.zavKurs ?? '',
+    //     previousEducationalEstablishment:
+    //       a.previousEducationalEstablishment ?? '',
+    //     addition: a.addition ?? '',
+    //   };
+    // });
     if (agenda) {
       return this.textService.getDecisionValue(
         questionId,
         agenda,
         heard,
-        speaker,
-        applicantPoints
+        speaker
       );
     }
     return '';
@@ -240,14 +247,6 @@ export class MainEditorComponent {
   }
 
   onPreviewClick() {
-    localStorage.setItem(
-      'documentData',
-      JSON.stringify(this.form.getRawValue())
-    );
-    const templateData = JSON.parse(
-      localStorage.getItem('documentData') ?? '{}'
-    ) as TemplateData;
-    this.dataService.updateTemplateData(templateData);
     this.router.navigate(['preview']);
   }
 
@@ -255,21 +254,5 @@ export class MainEditorComponent {
     const template = this.form.getRawValue();
     template.id = this.currentId;
     this.dataService.upsertTemplate(template);
-  }
-
-  openDialog() {
-    this.dialog
-      .open(PeopleDialogComponent, {
-        data: {
-          values: JSON.parse(JSON.stringify(this.dataService.people)),
-        },
-        width: '800px',
-      })
-      .afterClosed()
-      .subscribe((value) => {
-        if (value) {
-          this.dataService.allPeople = value;
-        }
-      });
   }
 }

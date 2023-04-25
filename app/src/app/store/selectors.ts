@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { Agenda } from '../api/contracts/agenda';
+import { IAgenda } from '../api/contracts/agenda';
 import { Applicant } from '../api/contracts/applicant';
 import { State } from './state';
 
@@ -42,13 +42,41 @@ export const selectAgendasByKeys = createSelector(
         acc.push(curr);
       }
       return acc;
-    }, [] as Agenda[]);
+    }, [] as IAgenda[]);
   }
 );
 
 export const selectAgendaKeys = createSelector(selectAgendas, (agenda) => {
   return [...new Set(agenda.map((a) => a.keyword))];
 });
+
+export const selectAgendaNationalityKeys = createSelector(
+  selectAgendas,
+  (agenda) => {
+    return [...new Set(agenda.map((a) => a.keyNationality))];
+  }
+);
+
+export const selectAgendaFormOfEducationKeys = createSelector(
+  selectAgendas,
+  (agenda) => {
+    return [...new Set(agenda.map((a) => a.keyFormOfEducation))];
+  }
+);
+
+export const selectAgendaEntryBaseKeys = createSelector(
+  selectAgendas,
+  (agenda) => {
+    return [...new Set(agenda.map((a) => a.keyEntryBase))];
+  }
+);
+
+export const selectAgendaEducationDegreeKeys = createSelector(
+  selectAgendas,
+  (agenda) => {
+    return [...new Set(agenda.map((a) => a.keyEducationDegree))];
+  }
+);
 
 export const selectStaffKeys = createSelector(selectStaffData, (staff) => {
   return [...new Set(staff.map((a) => a.subdivision))];

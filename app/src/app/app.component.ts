@@ -5,7 +5,8 @@ import { tap } from 'rxjs';
 import { TemplateData } from './api/contracts/template-data';
 import { CreateDocumentDialogComponent } from './dialogs/create-document-dialog/create-document-dialog.component';
 import { DataService } from './services/data.service';
-import { AgendaApiActions } from './store/actions';
+import { SpinnerService } from './services/spinner.service';
+import { AgendaApiActions, StaffDataActions } from './store/actions';
 import { selectTemplatesData } from './store/selectors';
 
 @Component({
@@ -21,8 +22,13 @@ export class AppComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private dataService: DataService,
-    private store: Store
+    private store: Store,
+    private spinnerService: SpinnerService
   ) {}
+
+  get loading() {
+    return this.spinnerService.isLoading;
+  }
 
   ngOnInit() {
     this.dataService
@@ -31,6 +37,11 @@ export class AppComponent implements OnInit {
         this.store.dispatch(
           AgendaApiActions.retrievedAgendas({ agendas: value })
         )
+      );
+    this.dataService
+      .getStaffData()
+      .subscribe((value) =>
+        this.store.dispatch(StaffDataActions.updateStaffData({ staff: value }))
       );
   }
 

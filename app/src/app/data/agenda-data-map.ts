@@ -1,6 +1,6 @@
-import { Agenda } from '../api/contracts/agenda';
+import { IAgenda } from '../api/contracts/agenda';
 
-export const _agendaData: Agenda[] = [
+export const _agendaData: IAgenda[] = [
   {
     id: '1',
     keyword: 'Різне',

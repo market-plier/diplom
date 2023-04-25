@@ -5,7 +5,7 @@ export enum Nationality {
   foreignUkr = 'ЗАК УКР',
 }
 
-export type NationalityType = 'Усі' | 'УКР' | 'ІН' | 'ЗАК УКР';
+export type NationalityType = 'Усі' | 'УКР' | 'ІН' | 'ЗАК УКР' | '';
 
 export const nationalityRecord: Record<Nationality, NationalityType> = {
   [Nationality.all]: 'Усі',
@@ -29,7 +29,8 @@ export type FormOfEducationType =
   | 'Денна'
   | 'Вечірня'
   | 'Д&В'
-  | 'Д&З';
+  | 'Д&З'
+  | '';
 
 export const formOfEducationRecord: Record<
   FormOfEducation,
@@ -60,7 +61,8 @@ export type EntryBaseType =
   | 'МС'
   | 'БАК'
   | 'МАГ'
-  | 'БАК&МАГ';
+  | 'БАК&МАГ'
+  | '';
 
 export const entryBaseRecord: Record<EntryBase, EntryBaseType> = {
   [EntryBase.all]: 'Усі',
@@ -97,7 +99,8 @@ export type EducationDegreeType =
   | 'МАГ(1.4)'
   | 'МАГ(1.9)'
   | 'Phd'
-  | 'Усі';
+  | 'Усі'
+  | '';
 
 export const educationDegreeRecord: Record<
   EducationDegree,

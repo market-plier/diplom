@@ -5,8 +5,7 @@ import {
   FormOfEducationType,
   NationalityType,
 } from './enums';
-
-export interface Agenda {
+export interface IAgenda {
   id: string;
   keyword: string;
   agendaType: string;
@@ -30,7 +29,6 @@ export interface AgendaCompositeKey {
   formOfEducation?: FormOfEducationType;
   speaker?: string;
   heard?: string;
-  applicantPoints?: IApplicantPoint[];
 }
 
 export interface IApplicantPoint {
@@ -43,3 +41,18 @@ export interface IApplicantPoint {
 }
 
 export const keywords = [...new Set(_agendaData.map((pynkt) => pynkt.keyword))];
+
+export class Agenda implements IAgenda {
+  id = '';
+  keyword = '';
+  agendaType = '';
+  decisionType = '';
+  part1 = '';
+  part2 = '';
+  part3 = '';
+  part4 = '';
+  keyNationality = '' as NationalityType;
+  keyEntryBase = '' as EntryBaseType;
+  keyEducationDegree = '' as EducationDegreeType;
+  keyFormOfEducation = '' as FormOfEducationType;
+}

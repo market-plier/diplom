@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
-import { Agenda, AgendaCompositeKey } from '../api/contracts/agenda';
+import { AgendaCompositeKey, IAgenda } from '../api/contracts/agenda';
 import { Applicant, IApplicant } from '../api/contracts/applicant';
-import { Staff } from '../api/contracts/staff';
+import { IStaff } from '../api/contracts/staff';
 import { TemplateData } from '../api/contracts/template-data';
 import { _agendaData } from '../data/agenda-data-map';
 import { ApplicantsData } from '../data/applicants-data';
 import { staffData } from '../data/staff-data';
-import { peopleData } from '../data/test-data';
 import {
   AgendaApiActions,
   ApplicantDataActions,
@@ -23,13 +22,8 @@ import { State } from '../store/state';
   providedIn: 'root',
 })
 export class DataService {
-  allPeople = peopleData;
   state!: State;
   applicants!: Applicant[];
-
-  get people() {
-    return this.allPeople;
-  }
 
   constructor(private store: Store) {
     try {
@@ -42,7 +36,6 @@ export class DataService {
     } catch (error) {
       localStorage.clear();
     }
-    this.updateStaffData(staffData);
     this.updateApplicantsData(ApplicantsData);
     this.store.select(selectState).subscribe((value) => (this.state = value));
     this.store
@@ -132,7 +125,33 @@ export class DataService {
   }
 
   getAgenda() {
-    return of(_agendaData);
+    const agendas = localStorage.getItem('agendaData');
+    let agendaData: IAgenda[];
+    if (!agendas) {
+      localStorage.setItem('agendaData', JSON.stringify(_agendaData));
+    }
+    try {
+      const agendas = localStorage.getItem('agendaData')!;
+      agendaData = JSON.parse(agendas) as IAgenda[];
+    } catch (error) {
+      agendaData = _agendaData;
+    }
+    return of(agendaData);
+  }
+
+  getStaffData() {
+    const staff = localStorage.getItem('staffData');
+    let staffDatas: IStaff[];
+    if (!staff) {
+      localStorage.setItem('staffData', JSON.stringify(staffData));
+    }
+    try {
+      const staff = localStorage.getItem('staffData')!;
+      staffDatas = JSON.parse(staff) as IStaff[];
+    } catch (error) {
+      staffDatas = staffData;
+    }
+    return of(staffDatas);
   }
 
   getStaffByKey(subdivision: string) {
@@ -176,7 +195,8 @@ export class DataService {
     );
   }
 
-  updateStaffData(staff: Staff[]) {
+  updateStaffData(staff: IStaff[]) {
+    localStorage.setItem('staffData', JSON.stringify(staff));
     this.store.dispatch(StaffDataActions.updateStaffData({ staff }));
   }
 
@@ -186,7 +206,8 @@ export class DataService {
     );
   }
 
-  updateAgendaData(agendas: Agenda[]) {
+  updateAgendaData(agendas: IAgenda[]) {
+    localStorage.setItem('agendaData', JSON.stringify(agendas));
     this.store.dispatch(AgendaApiActions.retrievedAgendas({ agendas }));
   }
 }
