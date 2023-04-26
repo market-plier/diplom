@@ -65,7 +65,7 @@ export class DataService {
         }
         const tempDataString = JSON.stringify(tempData);
         localStorage.setItem('templatesData', tempDataString);
-        return;
+        return templateData;
       } catch (error) {
         templateData.id = 1;
         const templates = JSON.stringify([templateData]);
@@ -79,6 +79,7 @@ export class DataService {
     this.store.dispatch(
       TemplatesDataActions.upsertTemplatesData({ templateData })
     );
+    return templateData;
   }
 
   deleteTemplate(template: TemplateData) {

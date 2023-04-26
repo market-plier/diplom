@@ -2,8 +2,17 @@
 <mat-dialog-content class="mat-typography">
   <article class="table-header">
     <button color="primary" mat-button (click)="addRow()">Додати новий</button>
+    <mat-form-field style="flex-grow: 0; width: 400px">
+      <mat-label>Пошук</mat-label>
+      <input
+        matInput
+        placeholder="Пошук по усім стовпцям"
+        #input
+        (keyup)="applyFilter($event)"
+      />
+    </mat-form-field>
   </article>
-  <div class="table-container">
+  <div *ngIf="dataSource" class="table-container">
     <mat-table #table [dataSource]="dataSource">
       <!-- Position Column -->
       <ng-container matColumnDef="id">
@@ -145,17 +154,30 @@
           </mat-form-field>
         </mat-cell>
       </ng-container>
+      <ng-container matColumnDef="delete" stickyEnd>
+        <mat-header-cell *matHeaderCellDef> Дія </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <button mat-icon-button matSuffix (click)="deleteRow(element)">
+            <mat-icon>delete_forever</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
       <mat-header-row
         *matHeaderRowDef="displayedColumns; sticky: true"
       ></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
     </mat-table>
   </div>
+  <mat-paginator
+    [pageSizeOptions]="[20, 30, 50]"
+    showFirstLastButtons
+    #paginator
+  ></mat-paginator>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button [mat-dialog-close]="dataSource" cdkFocusInitial>
+  <button mat-button [mat-dialog-close]="dataSource?.data" cdkFocusInitial>
     Save
   </button>
 </mat-dialog-actions>

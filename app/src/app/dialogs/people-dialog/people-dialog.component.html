@@ -2,8 +2,17 @@
 <mat-dialog-content class="mat-typography">
   <article class="table-header">
     <button color="primary" mat-button (click)="addRow()">Додати новий</button>
+    <mat-form-field style="flex-grow: 0; width: 400px">
+      <mat-label>Пошук</mat-label>
+      <input
+        matInput
+        placeholder="Пошук по усім стовпцям"
+        #input
+        (keyup)="applyFilter($event)"
+      />
+    </mat-form-field>
   </article>
-  <mat-table #table [dataSource]="dataSource">
+  <mat-table *ngIf="dataSource" #table [dataSource]="dataSource">
     <!-- Position Column -->
     <ng-container matColumnDef="subdivision">
       <mat-header-cell *matHeaderCellDef> Підрозділ </mat-header-cell>
@@ -66,7 +75,7 @@
         </mat-form-field>
       </mat-cell>
     </ng-container>
-    <ng-container matColumnDef="delete">
+    <ng-container matColumnDef="delete" stickyEnd>
       <mat-header-cell *matHeaderCellDef> Дія </mat-header-cell>
       <mat-cell *matCellDef="let element">
         <button mat-icon-button matSuffix (click)="deleteRow(element)">

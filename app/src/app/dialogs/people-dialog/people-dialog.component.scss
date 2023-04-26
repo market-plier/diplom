@@ -1,0 +1,24 @@
+.table-container {
+  width: 100%;
+  max-height: calc(95vh - 302px);
+  overflow: auto;
+}
+
+mat-dialog-content {
+  height: 81vh;
+  max-height: 86vh;
+}
+
+.mat-column-delete {
+  max-width: 48px;
+}
+
+mat-form-field {
+  flex-grow: 1;
+}
+
+.table-header {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+}

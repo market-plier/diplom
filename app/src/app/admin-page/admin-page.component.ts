@@ -32,7 +32,9 @@ export class AdminPageComponent {
             JSON.stringify(this.dataService.state.agenda)
           ) as IAgenda[],
 
-          width: '100%',
+          width: '95vw',
+          height: '95vh',
+          maxWidth: '98vw',
         }
       );
       dial.afterClosed().subscribe((value) => {
@@ -53,6 +55,8 @@ export class AdminPageComponent {
           values: JSON.parse(JSON.stringify(this.dataService.state.staff)),
         },
         width: '100%',
+        height: '95vh',
+        maxWidth: '98vw',
       })
       .afterClosed()
       .subscribe((value) => {

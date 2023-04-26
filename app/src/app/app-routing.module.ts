@@ -6,9 +6,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { PreviewComponent } from './preview/preview.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/editor', pathMatch: 'full' },
+  { path: '', redirectTo: '/admin', pathMatch: 'full' },
   { path: 'editor/:id', component: MainEditorComponent },
-  { path: 'editor', component: MainEditorComponent },
   { path: 'preview', component: PreviewComponent },
   { path: 'admin', component: AdminPageComponent },
   { path: '**', redirectTo: '/404', pathMatch: 'full' },

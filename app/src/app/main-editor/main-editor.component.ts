@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  LOCALE_ID,
+  Output,
+} from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -26,15 +33,21 @@ import {
   selectTemplateData,
 } from '../store/selectors';
 
+import { registerLocaleData } from '@angular/common';
+import localeUk from '@angular/common/locales/uk';
+
+registerLocaleData(localeUk);
+
 @Component({
   selector: 'app-main-editor',
   templateUrl: './main-editor.component.html',
   styleUrls: ['./main-editor.component.scss'],
+  providers: [{ provide: LOCALE_ID, useValue: 'uk-UA' }],
 })
 export class MainEditorComponent {
   @Input() form: FormGroup;
   @Output() preview = new EventEmitter<TemplateData>();
-
+  templateName = '';
   keys$ = this.store.select(selectAgendaKeys);
   staffKeys$ = this.store.select(selectStaffKeys);
   staffResolutions$ = this.store.select(selectStaffResolutions);
@@ -43,6 +56,8 @@ export class MainEditorComponent {
   formOfEducationKeys$ = this.store.select(selectAgendaFormOfEducationKeys);
   entryBaseKeys$ = this.store.select(selectAgendaEntryBaseKeys);
   educationDegreeKeys$ = this.store.select(selectAgendaEducationDegreeKeys);
+
+  formattedDate?: string;
 
   headerDefaultValue = `МІНІСТЕРСТВО ОСВІТИ I НАУКИ УКРАЇНИ
 НАЦІОНАЛЬНИЙ УНІВЕРСИТЕТ «ОДЕСЬКА ПОЛІТЕХНІКА»`;
@@ -58,7 +73,8 @@ export class MainEditorComponent {
     public dialog: MatDialog,
     private store: Store,
     private textService: TextBuilderService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private datePipe: DatePipe
   ) {
     this.form = this.formBuilder.group({
       header: ['', Validators.required],
@@ -67,10 +83,11 @@ export class MainEditorComponent {
       agendaKeys: this.getAgendaArrayControlls([]),
       secretar: [, Validators.required],
       rector: ['', Validators.required],
-      date: ['', Validators.required],
+      date: [new Date(), Validators.required],
     });
     this.form.valueChanges.subscribe((value) => {
       value.id = this.currentId;
+      value.name = this.templateName;
       this.store.dispatch(
         TemplateDataActions.updateTemplateData({ templateData: value })
       );
@@ -118,6 +135,7 @@ export class MainEditorComponent {
             temp.header ?? (temp.header = this.headerDefaultValue);
             temp.protocol ?? (temp.protocol = this.protocolDefaultValue);
             this.form.patchValue(temp);
+            this.templateName = temp.name ?? '';
             if (temp.agendaKeys) {
               temp.agendaKeys.forEach((a) => {
                 this.addAgendaPoint(a);
@@ -247,6 +265,7 @@ export class MainEditorComponent {
   }
 
   onPreviewClick() {
+    this.saveTemplate();
     this.router.navigate(['preview']);
   }
 
@@ -254,5 +273,14 @@ export class MainEditorComponent {
     const template = this.form.getRawValue();
     template.id = this.currentId;
     this.dataService.upsertTemplate(template);
+  }
+
+  onDateChange(event: any) {
+    this.formattedDate = this.datePipe.transform(
+      event.value,
+      'd MMMM yyyy року',
+      'uk-UA'
+    )!;
+    this.form.patchValue({ date: this.formattedDate });
   }
 }
