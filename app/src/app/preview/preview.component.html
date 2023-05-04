@@ -65,7 +65,13 @@
       <div style="font-weight: bold">Порядок денний:</div>
       <br />
       <div
-        style="display: flex; margin-left: 43px; gap: 7px; margin-top: 3px"
+        style="
+          display: flex;
+          margin-left: 43px;
+          gap: 7px;
+          margin-top: 3px;
+          page-break-inside: avoid;
+        "
         *ngFor="let item of templateData.agendaKeys; let i = index"
       >
         <div>{{ i + 1 }}.</div>
@@ -75,7 +81,13 @@
       <div style="font-weight: bold">Вирішили:</div>
       <br />
       <div
-        style="display: flex; margin-left: 43px; gap: 7px; margin-top: 3px"
+        style="
+          display: flex;
+          margin-left: 43px;
+          gap: 7px;
+          margin-top: 3px;
+          page-break-inside: avoid;
+        "
         *ngFor="let item of templateData.agendaKeys; let i = index"
       >
         <div>{{ i + 1 }}.</div>
@@ -83,7 +95,12 @@
       </div>
       <br />
       <div
-        style="margin-left: 63px; display: flex; justify-content: space-between"
+        style="
+          margin-left: 63px;
+          display: flex;
+          justify-content: space-between;
+          page-break-inside: avoid;
+        "
       >
         <div>Ректор</div>
         <div style="min-width: 170px">{{ templateData.rector }}</div>

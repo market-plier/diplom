@@ -21,7 +21,6 @@ import {
 import { TemplateData } from '../api/contracts/template-data';
 import { DataService } from '../services/data.service';
 import { TextBuilderService } from '../services/text-builder.service';
-import { TemplateDataActions } from '../store/actions';
 import {
   selectAgendaEducationDegreeKeys,
   selectAgendaEntryBaseKeys,
@@ -35,6 +34,7 @@ import {
 
 import { registerLocaleData } from '@angular/common';
 import localeUk from '@angular/common/locales/uk';
+import { TemplateDataActions } from '../store/actions';
 
 registerLocaleData(localeUk);
 
@@ -131,6 +131,7 @@ export class MainEditorComponent {
         .subscribe((templateData) => {
           if (templateData) {
             this.form.reset();
+            this.agendaPoints.clear();
             const temp = Object.assign({}, templateData) as TemplateData;
             temp.header ?? (temp.header = this.headerDefaultValue);
             temp.protocol ?? (temp.protocol = this.protocolDefaultValue);
