@@ -1,17 +1,18 @@
 <mat-sidenav-container>
   <mat-sidenav style="width: 400px" #sidenav>
-    <mat-nav-list>
+    <mat-nav-list *ngIf="templates$ | async as templates">
       <a mat-list-item [routerLink]="'/admin'"> Admin Page </a>
-      <ng-container *ngFor="let template of templates$ | async">
+      <ng-container *ngFor="let template of templates">
         <app-inline-edit
           [link]="'/editor/' + template.id"
           [value]="template.name ?? ''"
-          (update)="onUpdateTemplateName(template, $event)"
+          [date]="template.date ?? ''"
+          (update)="onUpdateTemplateName(template)"
           (delete)="onDeleteTemplate(template)"
         >
         </app-inline-edit>
       </ng-container>
-      <button mat-list-item (click)="createNewDocument()">
+      <button mat-list-item (click)="createNewDocument(templates)">
         Створити новий документ
       </button>
     </mat-nav-list>

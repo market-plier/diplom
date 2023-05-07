@@ -1,18 +1,45 @@
-<h2 mat-dialog-title>Створити новий документ</h2>
+<h2 mat-dialog-title>
+  {{
+    !!data?.template?.date && !!data?.template?.name
+      ? "Оновити документ"
+      : "Створити новий документ"
+  }}
+</h2>
 <mat-dialog-content class="mat-typography">
-  <mat-form-field style="width: 100%" appearance="fill">
-    <mat-label>Назва</mat-label>
-    <input [formControl]="formControll" matInput />
-  </mat-form-field>
+  <form [formGroup]="form">
+    <mat-form-field style="width: 100%" appearance="fill">
+      <mat-label>Номер протоколу</mat-label>
+      <input pattern="[0-9]" type="number" formControlName="name" matInput />
+    </mat-form-field>
+    <div class="datepicker">
+      від
+      <mat-form-field>
+        <input matInput formControlName="date" [value]="formattedDate" />
+
+        <input
+          type="hidden"
+          (dateChange)="onDateChange($event)"
+          [matDatepicker]="picker"
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker
+          #picker
+          (dateChange)="onDateChange($event)"
+        ></mat-datepicker>
+      </mat-form-field>
+    </div>
+  </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Cancel</button>
   <button
     mat-button
-    [mat-dialog-close]="formControll.value"
-    [disabled]="formControll.invalid"
+    [mat-dialog-close]="form.getRawValue()"
+    [disabled]="form.invalid"
     cdkFocusInitial
   >
-    Створити
+    {{
+      !!data?.template?.date && !!data?.template?.name ? "Оновити" : "Створити"
+    }}
   </button>
 </mat-dialog-actions>

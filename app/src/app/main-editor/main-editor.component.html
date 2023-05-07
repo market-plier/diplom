@@ -13,33 +13,20 @@
 
   <img src="assets/logo.png" class="logo" alt="" />
 
-  <mat-form-field class="protocol">
-    <mat-label>Протокол</mat-label>
-    <textarea
-      formControlName="protocol"
-      cdkTextareaAutosize
-      matInput
-      #autosize="cdkTextareaAutosize"
-      cdkAutosizeMinRows="1"
-      cdkAutosizeMaxRows="5"
-    ></textarea>
-  </mat-form-field>
-  <div class="datepicker">
-    від
-    <mat-form-field>
-      <input matInput formControlName="date" [value]="formattedDate" />
-
-      <input
-        type="hidden"
-        (dateChange)="onDateChange($event)"
-        [matDatepicker]="picker"
-      />
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker
-        #picker
-        (dateChange)="onDateChange($event)"
-      ></mat-datepicker>
-    </mat-form-field>
+  <div class="protocol"></div>
+  <div
+    style="
+      text-align: center;
+      font-size: 16px;
+      font-weight: bold;
+      white-space: pre-wrap;
+    "
+  >
+    <span>Протокол №{{ templateName }}</span>
+    <br />
+    <span>засідання приймальної комісії</span>
+    <br />
+    від {{ formattedDate }}
   </div>
   <mat-form-field appearance="fill">
     <mat-label>Присутні:</mat-label>

@@ -3,19 +3,22 @@
   mat-list-item
   [routerLink]="link"
   [routerLinkActive]="['active']"
-  >{{ value }}</a
+  ><span>{{ value }}</span>
+  <span style="margin-left: 100px">{{ date }}</span></a
 >
-<input *ngIf="isEdit" mat-list-item [(ngModel)]="value" />
-<button *ngIf="!isEdit" (click)="isEdit = !isEdit" mat-icon-button>
+<div style="display: flex; align-items: center">
+  <input *ngIf="isEdit" mat-list-item [(ngModel)]="value" />
+</div>
+<button *ngIf="!isEdit" (click)="update.emit()" mat-icon-button>
   <mat-icon>edit</mat-icon>
 </button>
-<button
+<!-- <button
   *ngIf="isEdit"
   (click)="update.emit(value); isEdit = !isEdit"
   mat-icon-button
 >
   <mat-icon>save</mat-icon>
-</button>
+</button> -->
 <button *ngIf="!isEdit" (click)="delete.emit()" mat-icon-button>
   <mat-icon>delete</mat-icon>
 </button>
