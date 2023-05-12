@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { first } from 'rxjs';
+import { Subscription, first } from 'rxjs';
 import { AgendaCompositeKey, IApplicantPoint } from '../api/contracts/agenda';
 import {
   EducationDegree,
@@ -51,6 +51,7 @@ export class MainEditorComponent {
   protocolDefaultValue = `Протокол №5
   засідання приймальної комісії`;
   currentId?: number;
+  formChangesSubscription?: Subscription;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -125,6 +126,10 @@ export class MainEditorComponent {
           }
         });
     });
+  }
+
+  ngOnDestroy() {
+    this.formChangesSubscription?.unsubscribe();
   }
 
   getArrayControlls(values: string[]) {
