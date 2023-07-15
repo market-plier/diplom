@@ -12,6 +12,7 @@ export const initialState: State = {
   agenda: [],
   applicants: [],
   staff: [],
+  templatesData: [],
 };
 
 export const stateReducer = createReducer(
