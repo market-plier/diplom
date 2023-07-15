@@ -1,5 +1,4 @@
 import { Component, Inject, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import {
@@ -8,7 +7,6 @@ import {
 } from '@angular/material/table';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { Agenda, IAgenda } from 'src/app/api/contracts/agenda';
-import { SpinnerService } from 'src/app/services/spinner.service';
 @Component({
   selector: 'app-agenda-dialog',
   templateUrl: './agenda-dialog.component.html',
@@ -38,10 +36,8 @@ export class AgendaDialogComponent {
   @ViewChild('paginator') paginator!: MatPaginator;
 
   constructor(
-    private readonly fb: FormBuilder,
     @Inject(MAT_DIALOG_DATA)
-    public data: IAgenda[],
-    private loading: SpinnerService
+    public data: IAgenda[]
   ) {
     data.forEach((d, idx) => (d.id = (idx + 1).toString()));
   }
@@ -84,7 +80,7 @@ export class AgendaDialogComponent {
     this.filter$.next((event.target as HTMLInputElement).value);
   }
 
-  isEqualStaff(agendaA: Agenda, agendaB: Agenda) {
+  private isEqualStaff(agendaA: Agenda, agendaB: Agenda) {
     return agendaA.id === agendaB.id && agendaA.keyword === agendaB.keyword;
   }
 }

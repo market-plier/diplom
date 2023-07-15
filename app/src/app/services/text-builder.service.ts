@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { IAgenda } from '../api/contracts/agenda';
 import { Applicant } from '../api/contracts/applicant';
 import { GenderSelectMap } from '../api/contracts/enums';
@@ -11,7 +10,7 @@ import { staffData } from '../data/staff-data';
   providedIn: 'root',
 })
 export class TextBuilderService {
-  constructor(private store: Store) {}
+  constructor() {}
 
   getDecisionValue(
     questionId: number,
@@ -69,7 +68,7 @@ export class TextBuilderService {
     return `${agendaData.decisionType}${agendaData.part2}${agendaData.part3}`;
   }
 
-  getAgendaValue(questionId: number, agendaData?: IAgenda) {
+  getAgendaValue(agendaData?: IAgenda) {
     return `${agendaData?.agendaType ?? 'Не знайдено Порядок денний'}`;
   }
 

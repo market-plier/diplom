@@ -65,7 +65,7 @@ export class AppComponent implements OnInit {
       });
   }
 
-  updateTemplate(template: TemplateData, name: string, date?: Date) {
+  private updateTemplate(template: TemplateData, name: string, date?: Date) {
     const temp = Object.assign({}, template, { name, date });
     return this.dataService.upsertTemplate(temp);
   }

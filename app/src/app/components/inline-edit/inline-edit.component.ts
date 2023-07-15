@@ -6,8 +6,6 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./inline-edit.component.scss'],
 })
 export class InlineEditComponent {
-  isEdit = false;
-
   @Output() update = new EventEmitter();
   @Output() delete = new EventEmitter();
 

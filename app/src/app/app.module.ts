@@ -24,7 +24,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EditableModule } from '@ngneat/edit-in-place';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { DBConfig, NgxIndexedDBModule } from 'ngx-indexed-db';
 import { AdminPageComponent } from './admin-page/admin-page.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -37,21 +36,6 @@ import { MainEditorComponent } from './main-editor/main-editor.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { PreviewComponent } from './preview/preview.component';
 import { stateReducer } from './store/reducers';
-
-const dbConfig: DBConfig = {
-  name: 'MyDb',
-  version: 1,
-  objectStoresMeta: [
-    {
-      store: 'people',
-      storeConfig: { keyPath: 'id', autoIncrement: true },
-      storeSchema: [
-        { name: 'name', keypath: 'name', options: { unique: false } },
-        { name: 'email', keypath: 'email', options: { unique: false } },
-      ],
-    },
-  ],
-};
 
 @NgModule({
   declarations: [
@@ -79,7 +63,6 @@ const dbConfig: DBConfig = {
     BrowserAnimationsModule,
     MatFormFieldModule,
     MatCheckboxModule,
-    MatFormFieldModule,
     FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
@@ -93,7 +76,6 @@ const dbConfig: DBConfig = {
     MatNativeDateModule,
     StoreModule.forRoot({ state: stateReducer }),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
-    NgxIndexedDBModule.forRoot(dbConfig),
   ],
   providers: [MatDatepickerModule, DatePipe],
   bootstrap: [AppComponent],

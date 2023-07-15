@@ -23,13 +23,12 @@ export class PreviewComponent {
     public readonly textService: TextBuilderService
   ) {}
   public onGenerateClick() {
-    // console.log(this.template);
     this.pdfService.downloadAsPDF(this.document);
   }
 
   getAgendaValue(agendaKey: AgendaCompositeKey, questionId: number) {
     const agenda = this.dataService.getAgendaByKey(agendaKey);
-    return this.textService.getAgendaValue(questionId, agenda);
+    return this.textService.getAgendaValue(agenda);
   }
 
   getDecisionValue(agendaKey: AgendaCompositeKey, questionId: number): string {
@@ -45,32 +44,5 @@ export class PreviewComponent {
       );
     }
     return '';
-  }
-
-  convertDate(date: string) {
-    const months = [
-      'січня',
-      'лютого',
-      'березня',
-      'квітня',
-      'травня',
-      'червня',
-      'липня',
-      'серпня',
-      'вересня',
-      'жовтня',
-      'листопада',
-      'грудня',
-    ];
-
-    const selectedData = new Date(date);
-
-    const day = selectedData.getDate();
-    const month = months[selectedData.getMonth()];
-    const year = selectedData.getFullYear();
-
-    const formattedDate = `${day} ${month} ${year} року`;
-
-    return formattedDate;
   }
 }

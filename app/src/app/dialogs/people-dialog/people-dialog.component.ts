@@ -67,7 +67,7 @@ export class PeopleDialogComponent {
     }
   }
 
-  isEqualStaff(staffA: Staff, staffB: Staff) {
+  private isEqualStaff(staffA: Staff, staffB: Staff) {
     return (
       staffA.fullName === staffB.fullName &&
       staffA.fullNameGenitive === staffB.fullNameGenitive &&

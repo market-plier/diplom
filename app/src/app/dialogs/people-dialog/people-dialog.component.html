@@ -12,80 +12,87 @@
       />
     </mat-form-field>
   </article>
-  <mat-table *ngIf="dataSource" #table [dataSource]="dataSource">
-    <!-- Position Column -->
-    <ng-container matColumnDef="subdivision">
-      <mat-header-cell *matHeaderCellDef> Підрозділ </mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <mat-form-field>
-          <input
-            matInput
-            [value]="element.subdivision"
-            [(ngModel)]="element.subdivision"
-          />
-        </mat-form-field>
-      </mat-cell>
-    </ng-container>
-    <!-- Name Column -->
-    <ng-container matColumnDef="position">
-      <mat-header-cell *matHeaderCellDef> ПК(н)</mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <mat-form-field>
-          <input
-            matInput
-            [value]="element.position"
-            [(ngModel)]="element.position"
-          />
-        </mat-form-field>
-      </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="positionGenitive">
-      <mat-header-cell *matHeaderCellDef> ПК(р) </mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <mat-form-field>
-          <input
-            matInput
-            [value]="element.positionGenitive"
-            [(ngModel)]="element.positionGenitive"
-          />
-        </mat-form-field>
-      </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="fullName">
-      <mat-header-cell *matHeaderCellDef> Повне Ім'я </mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <mat-form-field>
-          <input
-            matInput
-            [value]="element.fullName"
-            [(ngModel)]="element.fullName"
-          />
-        </mat-form-field>
-      </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="fullNameGenitive">
-      <mat-header-cell *matHeaderCellDef> Повне Ім'я (р) </mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <mat-form-field>
-          <input
-            matInput
-            [value]="element.fullNameGenitive"
-            [(ngModel)]="element.fullNameGenitive"
-          />
-        </mat-form-field>
-      </mat-cell>
-    </ng-container>
-    <ng-container matColumnDef="delete" stickyEnd>
-      <mat-header-cell *matHeaderCellDef> Дія </mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <button mat-icon-button matSuffix (click)="deleteRow(element)">
-          <mat-icon>delete_forever</mat-icon>
-        </button>
-      </mat-cell>
-    </ng-container>
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
-  </mat-table>
+  <div *ngIf="dataSource" class="table-container">
+    <mat-table *ngIf="dataSource" #table [dataSource]="dataSource">
+      <!-- Position Column -->
+      <ng-container matColumnDef="subdivision">
+        <mat-header-cell *matHeaderCellDef> Підрозділ </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <mat-form-field>
+            <input
+              matInput
+              [value]="element.subdivision"
+              [(ngModel)]="element.subdivision"
+            />
+          </mat-form-field>
+        </mat-cell>
+      </ng-container>
+      <!-- Name Column -->
+      <ng-container matColumnDef="position">
+        <mat-header-cell *matHeaderCellDef> ПК(н)</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <mat-form-field>
+            <input
+              matInput
+              [value]="element.position"
+              [(ngModel)]="element.position"
+            />
+          </mat-form-field>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="positionGenitive">
+        <mat-header-cell *matHeaderCellDef> ПК(р) </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <mat-form-field>
+            <input
+              matInput
+              [value]="element.positionGenitive"
+              [(ngModel)]="element.positionGenitive"
+            />
+          </mat-form-field>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="fullName">
+        <mat-header-cell *matHeaderCellDef> Повне Ім'я </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <mat-form-field>
+            <input
+              matInput
+              [value]="element.fullName"
+              [(ngModel)]="element.fullName"
+            />
+          </mat-form-field>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="fullNameGenitive">
+        <mat-header-cell *matHeaderCellDef> Повне Ім'я (р) </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <mat-form-field>
+            <input
+              matInput
+              [value]="element.fullNameGenitive"
+              [(ngModel)]="element.fullNameGenitive"
+            />
+          </mat-form-field>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="delete" stickyEnd>
+        <mat-header-cell *matHeaderCellDef> Дія </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <button mat-icon-button matSuffix (click)="deleteRow(element)">
+            <mat-icon>delete_forever</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+    </mat-table>
+  </div>
+  <mat-paginator
+    [pageSizeOptions]="[20, 30, 50]"
+    showFirstLastButtons
+    #paginator
+  ></mat-paginator>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Cancel</button>

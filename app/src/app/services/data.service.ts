@@ -2,20 +2,17 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
 import { AgendaCompositeKey, IAgenda } from '../api/contracts/agenda';
-import { Applicant, IApplicant } from '../api/contracts/applicant';
 import { IStaff } from '../api/contracts/staff';
 import { TemplateData } from '../api/contracts/template-data';
 import { _agendaData } from '../data/agenda-data-map';
-import { ApplicantsData } from '../data/applicants-data';
 import { staffData } from '../data/staff-data';
 import {
   AgendaApiActions,
-  ApplicantDataActions,
   StaffDataActions,
   TemplateDataActions,
   TemplatesDataActions,
 } from '../store/actions';
-import { selectApplicants, selectState } from '../store/selectors';
+import { selectState } from '../store/selectors';
 import { State } from '../store/state';
 
 @Injectable({
@@ -23,7 +20,6 @@ import { State } from '../store/state';
 })
 export class DataService {
   state!: State;
-  applicants!: Applicant[];
 
   constructor(private store: Store) {
     try {
@@ -36,11 +32,7 @@ export class DataService {
     } catch (error) {
       localStorage.clear();
     }
-    this.updateApplicantsData(ApplicantsData);
     this.store.select(selectState).subscribe((value) => (this.state = value));
-    this.store
-      .select(selectApplicants)
-      .subscribe((value) => (this.applicants = value));
   }
 
   upsertTemplate(templateData: TemplateData) {
@@ -114,7 +106,7 @@ export class DataService {
     return template;
   }
 
-  getTemplatesData() {
+  private getTemplatesData() {
     const templates = localStorage.getItem('templatesData');
     let tempData: TemplateData[] | undefined;
     if (templates) {
@@ -177,20 +169,7 @@ export class DataService {
     return agenda;
   }
 
-  getApplicantsByKey(ak?: AgendaCompositeKey) {
-    return this.applicants.filter(
-      (a) =>
-        ak?.educationDegree === a.getEducationDegree() &&
-        ak?.entryBase === a.getEntryBase() &&
-        ak?.nationality === a.getNationality()
-    );
-  }
-
-  getApplicantByFullName(name: string) {
-    return this.applicants.find((a) => a.applicant.fullName === name);
-  }
-
-  updateTemplateData(templateData: TemplateData) {
+  private updateTemplateData(templateData: TemplateData) {
     this.store.dispatch(
       TemplateDataActions.updateTemplateData({ templateData })
     );
@@ -199,12 +178,6 @@ export class DataService {
   updateStaffData(staff: IStaff[]) {
     localStorage.setItem('staffData', JSON.stringify(staff));
     this.store.dispatch(StaffDataActions.updateStaffData({ staff }));
-  }
-
-  updateApplicantsData(applicants: IApplicant[]) {
-    this.store.dispatch(
-      ApplicantDataActions.updateApplicantData({ applicants })
-    );
   }
 
   updateAgendaData(agendas: IAgenda[]) {

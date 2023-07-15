@@ -21,12 +21,12 @@ export class SelectAllComponent {
   }
 
   isIndeterminate(): boolean {
-    return (
+    const indeterminate =
       this.model.value &&
       this.values.length &&
       this.model.value.length &&
-      this.model.value.length < this.values.length
-    );
+      this.model.value.length < this.values.length;
+    return indeterminate;
   }
 
   toggleSelection(change: MatCheckboxChange): void {

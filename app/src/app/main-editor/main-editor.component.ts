@@ -1,10 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription, first } from 'rxjs';
-import { AgendaCompositeKey, IApplicantPoint } from '../api/contracts/agenda';
+import { AgendaCompositeKey } from '../api/contracts/agenda';
 import {
   EducationDegree,
   EntryBase,
@@ -57,7 +56,6 @@ export class MainEditorComponent {
     private formBuilder: FormBuilder,
     private dataService: DataService,
     private router: Router,
-    public dialog: MatDialog,
     private store: Store,
     private textService: TextBuilderService,
     private route: ActivatedRoute
@@ -151,7 +149,7 @@ export class MainEditorComponent {
   getAgendaValue(questionId: number, agendaForm: FormGroup) {
     const agendaKey = agendaForm.value as AgendaCompositeKey;
     const agenda = this.dataService.getAgendaByKey(agendaKey);
-    return this.textService.getAgendaValue(questionId, agenda);
+    return this.textService.getAgendaValue(agenda);
   }
 
   getDecisionValue(questionId: number, decisionForm: FormGroup) {
@@ -159,17 +157,6 @@ export class MainEditorComponent {
     const agenda = this.dataService.getAgendaByKey(agendaKey);
     const heard = this.dataService.getStaffByKey(agendaKey.heard ?? '');
     const speaker = this.dataService.getStaffByKey(agendaKey.speaker ?? '');
-    // const applicantPoints = agendaKey.applicantPoints?.map((a) => {
-    //   return {
-    //     applicant: this.dataService.getApplicantByFullName(a.applicant ?? ''),
-    //     source: a.source ?? '',
-    //     resolution: a.resolution ?? '',
-    //     zavKurs: a.zavKurs ?? '',
-    //     previousEducationalEstablishment:
-    //       a.previousEducationalEstablishment ?? '',
-    //     addition: a.addition ?? '',
-    //   };
-    // });
     if (agenda) {
       return this.textService.getDecisionValue(
         questionId,
@@ -179,12 +166,6 @@ export class MainEditorComponent {
       );
     }
     return '';
-  }
-
-  getApplicants(agendaForm: FormGroup) {
-    const agendaKey = agendaForm.value as AgendaCompositeKey;
-    const applicants = this.dataService.getApplicantsByKey(agendaKey);
-    return applicants;
   }
 
   createAgendaGroup(agenda?: AgendaCompositeKey) {
@@ -197,45 +178,7 @@ export class MainEditorComponent {
       speaker: [agenda?.speaker, Validators.required],
       heard: [agenda?.heard, Validators.required],
       agendaAddition: [agenda?.agendaAddition, Validators.required],
-      // applicantPoints: this.createApplicantsArrayControll(
-      //   agenda?.applicantPoints ?? [{}]
-      // ),
     });
-  }
-
-  createApplicantsArrayControll(applicants: IApplicantPoint[] = []) {
-    return this.formBuilder.array(
-      applicants.map((a) => this.createApplicantGroup(a)),
-      Validators.required
-    );
-  }
-
-  createApplicantGroup(applicantPoint?: IApplicantPoint) {
-    return this.formBuilder.group({
-      applicant: [applicantPoint?.applicant, Validators.required],
-      source: [applicantPoint?.source, Validators.required],
-      resolution: [applicantPoint?.resolution, Validators.required],
-      zavKurs: [applicantPoint?.zavKurs, Validators.required],
-      previousEducationalEstablishment: [
-        applicantPoint?.previousEducationalEstablishment,
-        Validators.required,
-      ],
-      addition: [applicantPoint?.addition, Validators.required],
-    });
-  }
-
-  getApplicantArrayControll(agendaForm: FormGroup) {
-    return agendaForm.get('applicantPoints') as FormArray;
-  }
-
-  addApplicantPoint(agendaForm: FormGroup, applicantPoint?: IApplicantPoint) {
-    const applicantControll = this.createApplicantGroup(applicantPoint);
-
-    this.getApplicantArrayControll(agendaForm).push(applicantControll);
-  }
-
-  deleteApplicantPoint(agendaForm: FormGroup, agendaIndex: number) {
-    this.getApplicantArrayControll(agendaForm).removeAt(agendaIndex);
   }
 
   addAgendaPoint(agendaKey?: AgendaCompositeKey) {

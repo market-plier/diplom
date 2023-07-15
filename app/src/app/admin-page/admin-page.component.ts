@@ -48,7 +48,7 @@ export class AdminPageComponent {
     }, 30);
   }
 
-  openDialog() {
+  openStaffDialog() {
     this.dialog
       .open(PeopleDialogComponent, {
         data: {
