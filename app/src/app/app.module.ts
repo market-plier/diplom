@@ -25,7 +25,6 @@ import { EditableModule } from '@ngneat/edit-in-place';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AdminPageComponent } from './admin-page/admin-page.component';
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { InlineEditComponent } from './components/inline-edit/inline-edit.component';
 import { SelectAllComponent } from './components/select-all/select-all.component';
@@ -56,7 +55,7 @@ import { stateReducer } from './store/reducers';
     MatTableModule,
     MatCardModule,
     MatListModule,
-    AppRoutingModule,
+    // AppRoutingModule,
     MatInputModule,
     MatPaginatorModule,
     MatSelectModule,

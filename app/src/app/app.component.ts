@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TemplateData } from './api/contracts/template-data';
 import { CreateDocumentDialogComponent } from './dialogs/create-document-dialog/create-document-dialog.component';
 import { DataService } from './services/data.service';
+import { ComponentNavigationService } from './services/navigation.service';
 import { SpinnerService } from './services/spinner.service';
 import { AgendaApiActions, StaffDataActions } from './store/actions';
 import { selectTemplatesData } from './store/selectors';
@@ -18,11 +18,11 @@ export class AppComponent implements OnInit {
   title = 'diplom';
   templates$ = this.store.select(selectTemplatesData);
   constructor(
+    public componentNavigationService: ComponentNavigationService,
     private dialog: MatDialog,
     private dataService: DataService,
     private store: Store,
-    private spinnerService: SpinnerService,
-    private router: Router
+    private spinnerService: SpinnerService
   ) {}
 
   get loading() {
@@ -60,7 +60,10 @@ export class AppComponent implements OnInit {
       .subscribe(({ name, date }) => {
         if (name && date) {
           const newTemplate = this.updateTemplate(template, name, date);
-          this.router.navigate(['/editor/' + (newTemplate?.id ?? '')]);
+          this.componentNavigationService.navigateToComponent(
+            'editor',
+            newTemplate?.id?.toString()
+          );
         }
       });
   }
@@ -83,7 +86,10 @@ export class AppComponent implements OnInit {
       .subscribe(({ name, date }) => {
         if (name && date) {
           const newTemplate = this.updateTemplate({}, name, date);
-          this.router.navigate(['/editor/' + (newTemplate?.id ?? '')]);
+          this.componentNavigationService.navigateToComponent(
+            'editor',
+            newTemplate?.id?.toString()
+          );
         }
       });
   }

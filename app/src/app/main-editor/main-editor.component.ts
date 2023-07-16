@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription, first } from 'rxjs';
 import { AgendaCompositeKey } from '../api/contracts/agenda';
@@ -12,6 +11,7 @@ import {
 } from '../api/contracts/enums';
 import { TemplateData } from '../api/contracts/template-data';
 import { DataService } from '../services/data.service';
+import { ComponentNavigationService } from '../services/navigation.service';
 import { TextBuilderService } from '../services/text-builder.service';
 import {
   selectAgendaEducationDegreeKeys,
@@ -55,10 +55,9 @@ export class MainEditorComponent {
   constructor(
     private formBuilder: FormBuilder,
     private dataService: DataService,
-    private router: Router,
     private store: Store,
     private textService: TextBuilderService,
-    private route: ActivatedRoute
+    public componentNavigationService: ComponentNavigationService
   ) {
     this.form = this.formBuilder.group({
       header: ['', Validators.required],
@@ -93,12 +92,11 @@ export class MainEditorComponent {
   }
 
   ngOnInit() {
-    this.route.paramMap.subscribe((params) => {
-      const idParam = params.get('id');
+    this.componentNavigationService.currentId$.pipe().subscribe((idParam) => {
       const id = Number(idParam);
       const template = this.dataService.getTemplateDataById(id);
       if (idParam && !template) {
-        this.router.navigate(['/404']);
+        this.componentNavigationService.navigateToComponent('404');
       }
       this.currentId = id;
       this.store
@@ -193,7 +191,7 @@ export class MainEditorComponent {
 
   onPreviewClick() {
     this.saveTemplate();
-    this.router.navigate(['preview']);
+    this.componentNavigationService.navigateToComponent('preview');
   }
 
   saveTemplate() {

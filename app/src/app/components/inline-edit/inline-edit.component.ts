@@ -8,7 +8,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class InlineEditComponent {
   @Output() update = new EventEmitter();
   @Output() delete = new EventEmitter();
-
+  @Output() click = new EventEmitter();
+  @Input() isActive = false;
   @Input() value = '';
   @Input() date = '';
   @Input() link = '';

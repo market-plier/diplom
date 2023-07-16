@@ -1,14 +1,29 @@
 <mat-sidenav-container>
   <mat-sidenav style="width: 400px" #sidenav>
     <mat-nav-list *ngIf="templates$ | async as templates">
-      <a mat-list-item [routerLink]="'/admin'"> Admin Page </a>
+      <a
+        mat-list-item
+        (click)="componentNavigationService.navigateToComponent('admin')"
+      >
+        Admin Page
+      </a>
       <ng-container *ngFor="let template of templates">
         <app-inline-edit
           [link]="'/editor/' + template.id"
           [value]="template.name ?? ''"
           [date]="template.date ?? ''"
+          [isActive]="
+            (componentNavigationService.currentId$ | async) ===
+            template.id?.toString()
+          "
           (update)="onUpdateTemplateName(template)"
           (delete)="onDeleteTemplate(template)"
+          (click)="
+            componentNavigationService.navigateToComponent(
+              'editor',
+              template.id?.toString()
+            )
+          "
         >
         </app-inline-edit>
       </ng-container>
@@ -27,7 +42,31 @@
       </mat-toolbar>
     </p>
     <div style="min-height: 85vh">
-      <router-outlet></router-outlet>
+      <!-- <router-outlet></router-outlet> -->
+      <div>
+        <ng-container
+          *ngIf="componentNavigationService.getActiveComponent() === 'admin'"
+        >
+          <app-admin-page></app-admin-page>
+        </ng-container>
+
+        <ng-container
+          *ngIf="componentNavigationService.getActiveComponent() === 'editor'"
+        >
+          <app-main-editor></app-main-editor>
+        </ng-container>
+        <ng-container
+          *ngIf="componentNavigationService.getActiveComponent() === 'preview'"
+        >
+          <app-preview></app-preview>
+        </ng-container>
+        <ng-container
+          *ngIf="componentNavigationService.getActiveComponent() === '404'"
+        >
+          <app-page-not-found></app-page-not-found>
+        </ng-container>
+        <!-- Other component containers -->
+      </div>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

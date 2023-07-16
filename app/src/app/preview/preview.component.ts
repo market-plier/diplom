@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { logoUrlData } from 'src/assets/images';
 import { AgendaCompositeKey } from '../api/contracts/agenda';
 import { DataService } from '../services/data.service';
+import { ComponentNavigationService } from '../services/navigation.service';
 import { PdfGeneratorService } from '../services/pdf-generator.service';
 import { TextBuilderService } from '../services/text-builder.service';
 import { selectTemplateData } from '../store/selectors';
@@ -20,7 +21,8 @@ export class PreviewComponent {
     private pdfService: PdfGeneratorService,
     public readonly dataService: DataService,
     private store: Store,
-    public readonly textService: TextBuilderService
+    public readonly textService: TextBuilderService,
+    public componentNavigationService: ComponentNavigationService
   ) {}
   public onGenerateClick() {
     this.pdfService.downloadAsPDF(this.document);

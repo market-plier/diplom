@@ -1,6 +1,14 @@
 <ng-container *ngIf="templateData$ | async as templateData">
   <div class="buttons">
-    <a mat-raised-button [routerLink]="'/editor/' + templateData.id" class=""
+    <a
+      mat-raised-button
+      (click)="
+        componentNavigationService.navigateToComponent(
+          'editor',
+          templateData.id?.toString()
+        )
+      "
+      class=""
       >Повернутися до заповнення</a
     >
     <button
@@ -16,6 +24,7 @@
     <div
       style="
         font-family: 'Times New Roman', Times, serif;
+        text-align: justify;
         padding: 1cm;
         padding-left: 2.5cm;
         width: 21cm;

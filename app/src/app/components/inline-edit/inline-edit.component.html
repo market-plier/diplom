@@ -1,4 +1,4 @@
-<a mat-list-item [routerLink]="link" [routerLinkActive]="['active']"
+<a mat-list-item [activated]="isActive" (click)="click.emit()"
   ><span>{{ value }}</span>
   <span style="margin-left: 100px">{{ date }}</span></a
 >
